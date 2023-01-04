@@ -11,3 +11,14 @@
 | `Refactor`  | 코드 리팩토링 |
 |   `Test`    | 테스트 (테스트 코드 추가, 수정, 삭제: 비즈니스 로직에 변경 없는 경우) |
 |   `Chore`   | 기타 변경사항 (빌드 스크립트 수정 등) |
+
+Branches
+- userManagement : log-in, log-out etc..
+- userData : user data managing
+- open api 
+
+Dependencies
+- JPA 
+- MySQL Driver
+- Spring Security
+- DevTools
