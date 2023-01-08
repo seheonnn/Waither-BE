@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    driver-class-name:
+    url:
+    username:
+    password:
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ##
+            client-secret: ##
+            redirect-uri: ##
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: Kakao
+            scope:
+              - gender
+              - profile_nickname
+              - account_email
+
+
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+#    org.hibernate.type: trace
+
+
