@@ -11,7 +11,8 @@ public class UserService implements UserDAO {
 
     private UserRepository userRepository;
 
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    // 암호화
+//    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     public UserService(UserRepository userRepository) {

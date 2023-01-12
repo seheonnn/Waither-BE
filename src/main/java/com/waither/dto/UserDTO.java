@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @Builder
 public class UserDTO {
 
-    private Integer userIdx;
+    private Long userIdx;
 
     private String userName;
 
@@ -37,7 +37,7 @@ public class UserDTO {
 
     private char windAlarm;
 
-    private Integer windDegree;
+    private Long windDegree;
 
     private char rainFall;
 

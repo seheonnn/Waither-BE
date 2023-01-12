@@ -19,7 +19,7 @@ public class UserEntity {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_sequence")
-    private Integer userIdx;
+    private Long userIdx;
 
     @Column(name = "name", nullable = false)
     private String userName;
@@ -54,7 +54,7 @@ public class UserEntity {
     private char windAlarm;
 
     @Column(name = "windDegree", nullable = false)
-    private Integer windDegree;
+    private Long windDegree;
 
     @Column(name = "rainFall", nullable = false)
     private char rainFall;
