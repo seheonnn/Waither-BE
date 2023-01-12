@@ -30,6 +30,8 @@ dependencies {
 
 	//내장톰캣 오류
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//json 파싱
+	implementation 'org.json:json:20220924'
 }
 
 tasks.named('test') {
