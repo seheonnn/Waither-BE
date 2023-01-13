@@ -1,8 +1,11 @@
 package com.waither.controller;
 
 import com.waither.dto.UserDTO;
+import com.waither.entities.UserEntity;
+import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.UserDataMapping;
+import com.waither.repository.UserRepository;
 import com.waither.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +25,41 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    private final UserRepository userRepository;
 
     // 7 설문 답변 저장
     @ResponseBody
     @PostMapping("/survey")
-    public ResponseEntity<Void> savedSurvey(@RequestBody Long userIdx, double veryCold, double cold, double good, double hot, double veryHot, Timestamp outTime) {
+    public ResponseEntity<Void> savedSurvey(@RequestParam("userIdx") Long userIdx, @RequestBody double veryCold, double cold, double good, double hot, double veryHot, Timestamp outTime) {
         if (userService.savedSurvey(userIdx, veryCold, cold, good, hot, veryHot, outTime)) {
+            UserEntity userEntity = userRepository.findById(userIdx).get();
             return ResponseEntity.ok(null);
         }
         else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    // 11 설정 메인화면 조회
+    @ResponseBody
+    @GetMapping("/settings")
+    public ResponseEntity<Optional<MainDataMapping>> getMainData(@RequestParam("userIdx") Long userIdx) {
+        try {
+            Optional<MainDataMapping> mainData = userService.getMainData(userIdx);
+            return ResponseEntity.ok(mainData);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    // 12 설정 메인화면 변경
+    @ResponseBody
+    @PostMapping("/settings")
+    public ResponseEntity<Void> updateMainData(@RequestParam("userIdx") Long userIdx, @RequestBody char rainFall, char dust, char wind) {
+        if(userService.updateMainData(userIdx, rainFall, dust, wind))
+            return ResponseEntity.ok(null);
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     // 13 사용자 설정 데이터 조회

@@ -1,14 +1,12 @@
 package com.waither.service;
 
 import com.waither.dao.UserDAO;
-import com.waither.dto.UserDTO;
 import com.waither.entities.UserEntity;
+import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.UserDataMapping;
 import com.waither.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -18,9 +16,6 @@ import java.util.Optional;
 public class UserService implements UserDAO {
 
     private UserRepository userRepository;
-
-    // 암호화
-//    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -39,6 +34,24 @@ public class UserService implements UserDAO {
         return true;
     }
 
+    // 11 설정 메인화면 조회
+    public Optional<MainDataMapping> getMainData(Long userIdx) {
+        Optional<MainDataMapping> mainData = userRepository.findMainData(userIdx);
+        return mainData;
+    }
+
+    // 12 설정 메인화면 변경
+    public boolean updateMainData(Long userIdx, char rainFall, char dust, char wind) {
+        Optional<UserEntity> userEntity = userRepository.findById(userIdx);
+        if(userEntity.isPresent()) {
+            userEntity.get().setRainFall(rainFall);
+            userEntity.get().setDust(dust);
+            userEntity.get().setWind(wind);
+            return true;
+        }
+        else
+            return false;
+    }
     // 13 사용자 설정 데이터 조회
     public Optional<UserDataMapping> getUserData(Long userIdx) {
         Optional<UserDataMapping> userData = userRepository.findUserData(userIdx);

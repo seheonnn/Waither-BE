@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/alarms")
+@RequestMapping(value = "/alarm")
 public class AlarmController {
 
     @Autowired
@@ -25,10 +25,10 @@ public class AlarmController {
 
     // 9 전체 알람 조회
     @ResponseBody
-    @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> myAlarmList(@PathVariable(name = "id") String id) {
+    @GetMapping("")
+    public ResponseEntity<Map<String, Object>> myAlarmList(@RequestParam("userIdx") Long userIdx) {
         try {
-            List<AlarmEntity> list = alarmService.myAlarmList(id);
+            List<AlarmEntity> list = alarmService.myAlarmList(userIdx);
             Map<String, Object> map = new HashMap<>();
             map.put("alarmlist", list);
             return ResponseEntity.ok(map);
@@ -40,8 +40,8 @@ public class AlarmController {
 
     // 10 알람 삭제
     @ResponseBody
-    @PostMapping("/delete/{alarmIdx}")
-    public ResponseEntity<Void> deleteAlarm(@PathVariable(name = "alarmIdx") Long alarmIdx) {
+    @PostMapping("")
+    public ResponseEntity<Void> deleteAlarm(@RequestParam("alarmIdx") Long alarmIdx) {
         if (alarmService.delete(alarmIdx)) {
             return ResponseEntity.ok(null);
         }
