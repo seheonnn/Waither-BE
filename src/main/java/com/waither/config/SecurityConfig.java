@@ -35,8 +35,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
         httpSecurity.authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN") //관리자 페이지
-                .antMatchers("/wish").hasRole("USER") //로그인 유저만 찜 관련 허용
                 .anyRequest().permitAll() //해당 url 요청 토큰 없어도 허용
                 .and()
                 .anonymous().principal("anonymousUser").authorities("ROLE_ANONYMOUS");

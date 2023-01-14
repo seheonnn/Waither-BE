@@ -56,8 +56,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         User user = User.builder()
                 .email(userInfo.getEmail())
                 .role("USER") //RoleType 클래스 추가 시 수정
-                .gender(userInfo.getGender()) //null이면?
-                .age(userInfo.getAge()) //null이면?
                 .active(1)
                 .authProvider(String.valueOf(providerType))
                 .build();

@@ -28,14 +28,5 @@ public class KakaoOAuth2Info extends OAuth2UserInfo{
         return (String) attributes.get("account_email");
     }
 
-    @Override
-    public String getGender() {
-        return attributes.get("gender").toString();
-    }
-
-    @Override
-    public int getAge() {
-        return (int) attributes.get("age_range");
-    }
 
 }
