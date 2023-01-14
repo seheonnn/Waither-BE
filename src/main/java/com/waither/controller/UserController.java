@@ -5,6 +5,7 @@ import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.UserDataMapping;
+import com.waither.mapping.WindAlarmMapping;
 import com.waither.repository.UserRepository;
 import com.waither.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -102,6 +103,29 @@ public class UserController {
     @PostMapping("/settings/alarm")
     public ResponseEntity<Void> updateAlarmData(@RequestParam("userIdx") Long userIdx, @RequestBody Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm) {
         if (userService.updateAlarmData(userIdx, Mon, Tue, Wed, Thu, Fri, Sat, Sun, outAlarm, climateAlarm, customAlarm, rainAlarm, snowAlarm)) {
+            return ResponseEntity.ok(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    // 17 사용자 바람 세기 설정 조회
+    @ResponseBody
+    @GetMapping("/settings/alarm/wind")
+    public ResponseEntity<Optional<WindAlarmMapping>> getWindAlarm(@RequestParam("userIdx") Long userIdx) {
+        try {
+            Optional<WindAlarmMapping> userWindAlarm = userService.getWindAlarm(userIdx);
+            return ResponseEntity.ok(userWindAlarm);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    // 18 사용자 바람 세기 설정 변경
+    @ResponseBody
+    @PostMapping("/settings/alarm/wind")
+    public ResponseEntity<Void> updateWindAlarm(@RequestParam("userIdx") Long userIdx, @RequestBody Character windAlarm, Integer windValue) {
+        if (userService.updateWindAlarm(userIdx, windAlarm, windValue)) {
             return ResponseEntity.ok(null);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

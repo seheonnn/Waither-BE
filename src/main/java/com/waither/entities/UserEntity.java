@@ -53,8 +53,8 @@ public class UserEntity {
     @Column(name = "windAlarm", nullable = false)
     private char windAlarm;
 
-    @Column(name = "windDegree", nullable = false)
-    private Long windDegree;
+    @Column(name = "windValue", nullable = false)
+    private Integer windValue;
 
     @Column(name = "rainFall", nullable = false)
     private char rainFall;
@@ -122,7 +122,7 @@ public class UserEntity {
                 .rainAlarm(rainAlarm)
                 .snowAlarm(snowAlarm)
                 .windAlarm(windAlarm)
-                .windDegree(windDegree)
+                .windValue(windValue)
                 .rainFall(rainFall)
                 .dust(dust)
                 .wind(wind)

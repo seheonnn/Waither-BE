@@ -37,7 +37,7 @@ public class UserDTO {
 
     private char windAlarm;
 
-    private Long windDegree;
+    private Integer windValue;
 
     private char rainFall;
 
@@ -87,7 +87,7 @@ public class UserDTO {
                 .rainAlarm(rainAlarm)
                 .snowAlarm(snowAlarm)
                 .windAlarm(windAlarm)
-                .windDegree(windDegree)
+                .windValue(windValue)
                 .rainFall(rainFall)
                 .dust(dust)
                 .wind(wind)

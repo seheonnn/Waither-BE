@@ -4,6 +4,7 @@ import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.UserDataMapping;
+import com.waither.mapping.WindAlarmMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,4 +20,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "select rainFall, dust, wind from User where userIdx > ?1")
     Optional<MainDataMapping> findMainData(Long userIdx);
+
+    @Query(value = "select u.windAlarm as windAlarm, u.windValue as windValue from User u where u.userIdx > ?1")
+    Optional<WindAlarmMapping> findWindAlarm(Long userIdx);
 }

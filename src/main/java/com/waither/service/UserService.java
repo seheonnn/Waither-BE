@@ -5,6 +5,7 @@ import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.UserDataMapping;
+import com.waither.mapping.WindAlarmMapping;
 import com.waither.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,6 +99,20 @@ public class UserService implements UserDAO {
         userData.setCustomAlarm(customAlarm);
         userData.setRainAlarm(rainAlarm);
         userData.setSnowAlarm(snowAlarm);
+        return true;
+    }
+
+    // 17 사용자 바람 세기 설정 조회
+    public Optional<WindAlarmMapping> getWindAlarm(Long userIdx) {
+        Optional<WindAlarmMapping> windAlarmMapping = userRepository.findWindAlarm(userIdx);
+        return windAlarmMapping;
+    }
+
+    // 18 사용자 바람 세기 설정 변경
+    public boolean updateWindAlarm(Long userIdx, Character windAlarm, Integer windValue) {
+        UserEntity userData = userRepository.findById(userIdx).get();
+        userData.setWindAlarm(windAlarm);
+        userData.setWindValue(windValue);
         return true;
     }
 
