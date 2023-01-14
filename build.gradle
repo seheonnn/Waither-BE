@@ -42,8 +42,6 @@ dependencies {
 	//http
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
-	//servlet
-	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 }
 
 tasks.named('test') {
