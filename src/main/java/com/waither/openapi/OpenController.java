@@ -1,9 +1,11 @@
 package com.waither.openapi;
 
 import com.waither.openapi.model.GetWeatherRes;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -99,16 +101,18 @@ public class OpenController {
         Double humid = null;
 
 
-        JSONObject jObject = new JSONObject(data);
-        JSONObject response = jObject.getJSONObject("response");
-        JSONObject body = response.getJSONObject("body");
-        JSONObject items = body.getJSONObject("items");
-        JSONArray jArray = items.getJSONArray("item");
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jObject =  (JSONObject) jsonParser.parse(result);
+        JSONObject response = (JSONObject) jObject.get("response");
+        JSONObject body = (JSONObject) response.get("body");
+        JSONObject items = (JSONObject) body.get("items");
+        JSONArray jArray = (JSONArray) items.get("item");
 
-        for(int i = 0; i < jArray.length(); i++) {
-            JSONObject obj = jArray.getJSONObject(i);
-            String category = obj.getString("category");
-            double obsrValue = obj.getDouble("obsrValue");
+        for(int i = 0; i < jArray.size(); i++) {
+            JSONObject obj = (JSONObject) jArray.get(i);
+            String category = (String) obj.get("category");
+            //캐스팅 변환이 아니라 String 클래스의 valueOf(Object)로 가져오기
+            double obsrValue = Double.valueOf((String) obj.get("obsrValue"));
 
             switch (category) {
                 case "T1H":
@@ -128,6 +132,9 @@ public class OpenController {
                     break;
             }
         }
+        
+        dto.setDate(baseDate);
+        dto.setTime(baseTime);
 
         dto.setTmp(temp);
         dto.setRn1(rainAmount);
@@ -135,7 +142,9 @@ public class OpenController {
         dto.setWsd(speed);
         dto.setReh(humid);
 
-        System.out.println("수신 온도 출력"+dto.getTmp());
+        /*System.out.println("날짜 출력"+dto.getDate());
+        System.out.println("수신 온도 출력"+dto.getTmp());*/
+        //dto에 담기까지 완료
     }
 
     /*@ResponseBody
