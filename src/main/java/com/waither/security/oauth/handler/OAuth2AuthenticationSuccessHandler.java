@@ -22,13 +22,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private String redirectUri;
+    //    @Value("${app.oauth2.authorizedRedirectUri}")
+//    private String redirectUri;
     private final JwtTokenProvider tokenProvider;
     private final CookieAuthorizationRepository authorizationRequestRepository;
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(request, response, authentication);
+        log.info("OAuth2 SuccessHandler - on() : " +targetUrl);
 
         if (response.isCommitted()) {
             log.debug("Response has already been committed");
@@ -44,16 +45,18 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue);
-
-        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new IllegalArgumentException("redirect URIs are not matched");
-        }
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+//        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+//                .map(Cookie::getValue);
+//
+//        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+//            throw new IllegalArgumentException("redirect URIs are not matched");
+//        }
+//        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         // JWT 생성
         String accessToken = tokenProvider.createAccessToken(authentication);
+        log.info("OAuth2 SuccessHandler - determineTargetUrl: " + accessToken);
+
         tokenProvider.createRefreshToken(authentication, response);
 
 //        return UriComponentsBuilder.fromUriString(targetUrl)
@@ -62,14 +65,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .build().toUriString();
     }
 
-    private boolean isAuthorizedRedirectUri(String uri) {
-        URI clientRedirectUri = URI.create(uri);
-        URI authorizedUri = URI.create(redirectUri);
-
-        if (authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                && authorizedUri.getPort() == clientRedirectUri.getPort()) {
-            return true;
-        }
-        return false;
-    }
+//    private boolean isAuthorizedRedirectUri(String uri) {
+//        URI clientRedirectUri = URI.create(uri);
+//        URI authorizedUri = URI.create(redirectUri);
+//
+//        if (authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+//                && authorizedUri.getPort() == clientRedirectUri.getPort()) {
+//            return true;
+//        }
+//        return false;
+//    }
 }

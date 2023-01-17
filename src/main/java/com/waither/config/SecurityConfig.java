@@ -31,24 +31,25 @@ public class SecurityConfig {
     private final OAuth2AuthenticationFailureHandler failureHandler;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers("/**"); //ignoring을 하면 filter 자체를 타지 않음
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring().antMatchers("/**"); //ignoring을 하면 filter 자체를 타지 않음
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
-        httpSecurity.authorizeRequests()
-                .anyRequest().permitAll(); //해당 url 요청 토큰 없어도 허용
-        httpSecurity.formLogin().disable() // 로그인 form 미사용
+        httpSecurity.authorizeRequests() //보호된 uri에 접근할 수 있는 권한 설정
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/token/**").permitAll()
+                .anyRequest().permitAll() //해당 url 요청 전체 허용
+                .and()
                 .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/oauth2/authorize") // 소셜 로그인 uri
                 .authorizationRequestRepository(cookieAuthorizationRepository)
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*") // 소셜 인증 후 redirect uri
+//                .baseUri("/oauth2/callback/*") // 소셜 인증 후 redirect uri
                 .and()
                 .userInfoEndpoint()
                 .userService(oAuth2UserService) // 소셜에서 회원 정보 받아와 가공

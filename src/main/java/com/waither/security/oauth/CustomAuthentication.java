@@ -1,6 +1,8 @@
 package com.waither.security.oauth;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,12 +13,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Log4j2
 @Getter
 public class CustomAuthentication implements OAuth2User, UserDetails {
 
-    private Long id;
+    private String id;
     private String email;
     private Collection<? extends GrantedAuthority> authorities;
+
+    @Setter
     private Map<String, Object> attributes;
 
     public CustomAuthentication(String id, String email, Collection<? extends GrantedAuthority> authorities) {
@@ -30,15 +35,17 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
         List<GrantedAuthority> authorityList = Collections.singletonList(new SimpleGrantedAuthority(
                 "" + RoleType.USER));
         return new CustomAuthentication(
-                user.getId(),
+                user.getAuthId(),
                 user.getEmail(),
                 authorityList
         );
     }
 
     public static CustomAuthentication create(User user, Map<String, Object> attributes) {
+        log.info("CustomAuthentication create : " + attributes.toString());
         CustomAuthentication customAuthentication = CustomAuthentication.create(user);
         customAuthentication.setAttributes(attributes);
+        log.info("CustomAuthentication create : " + customAuthentication.id + customAuthentication.email);
         return customAuthentication;
     }
 
@@ -74,7 +81,7 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return attributes;
     }
 
     @Override
@@ -84,6 +91,6 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        return null;
+        return String.valueOf(id);
     }
 }

@@ -2,7 +2,7 @@ package com.waither.security.oauth.userInfo;
 
 import java.util.Map;
 
-public class KakaoOAuth2Info extends OAuth2UserInfo{
+public class KakaoOAuth2Info extends OAuth2UserInfo {
     public KakaoOAuth2Info(Map<String, Object> attributes) {
         super(attributes);
     }
@@ -25,8 +25,12 @@ public class KakaoOAuth2Info extends OAuth2UserInfo{
 
     @Override
     public String getEmail() {
-        return (String) attributes.get("account_email");
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+
+        if (kakaoAccount == null) {
+            return null;
+        }
+
+        return (String) kakaoAccount.get("email");
     }
-
-
 }
