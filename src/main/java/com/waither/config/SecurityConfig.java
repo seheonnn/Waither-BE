@@ -1,5 +1,8 @@
 package com.waither.config;
 
+import com.waither.security.jwt.JwtAuthenticationEntryPoint;
+import com.waither.security.jwt.JwtAuthenticationFilter;
+import com.waither.security.jwt.JwtTokenProvider;
 import com.waither.security.oauth.cookie.CookieAuthorizationRepository;
 import com.waither.security.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.waither.security.oauth.handler.OAuth2AuthenticationSuccessHandler;
@@ -13,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +29,7 @@ public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler successHandler;
     private final OAuth2AuthenticationFailureHandler failureHandler;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -35,23 +40,27 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
         httpSecurity.authorizeRequests()
-                .anyRequest().permitAll() //해당 url 요청 토큰 없어도 허용
-                .and()
-                .anonymous().principal("anonymousUser").authorities("ROLE_ANONYMOUS");
-        httpSecurity.formLogin().disable()
+                .anyRequest().permitAll(); //해당 url 요청 토큰 없어도 허용
+        httpSecurity.formLogin().disable() // 로그인 form 미사용
                 .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/oauth2/authorize")
+                .baseUri("/oauth2/authorize") // 소셜 로그인 uri
                 .authorizationRequestRepository(cookieAuthorizationRepository)
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*")
+                .baseUri("/oauth2/callback/*") // 소셜 인증 후 redirect uri
                 .and()
                 .userInfoEndpoint()
-                .userService(oAuth2UserService)
+                .userService(oAuth2UserService) // 소셜에서 회원 정보 받아와 가공
                 .and()
                 .successHandler(successHandler)
                 .failureHandler(failureHandler);
+
+        httpSecurity.exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class) //JwtAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 이전에 삽입
+                .logout().permitAll();
+
         return httpSecurity.build();
     }
 }
