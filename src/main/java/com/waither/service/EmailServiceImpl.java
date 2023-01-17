@@ -104,10 +104,10 @@ public class EmailServiceImpl implements EmailService{
     }
 
     @Override
-    public String sendSimpleMessage(String to)throws Exception {
+    public String sendSimpleMessage(String to) throws Exception {
         // TODO Auto-generated method stub
-        MimeMessage message = createMessage(to);
         try{//예외처리
+            MimeMessage message = createMessage(to);
             emailSender.send(message);
         }catch(MailException es){
             es.printStackTrace();
@@ -117,7 +117,7 @@ public class EmailServiceImpl implements EmailService{
     }
 
     @Override
-    public String sendPassword(String to)throws Exception {
+    public String sendPassword(String to) throws Exception {
         MimeMessage message = createPassword(to);
         try{
             emailSender.send(message);
