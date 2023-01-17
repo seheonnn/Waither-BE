@@ -1,13 +1,13 @@
 package com.waither.security.oauth.service;
 
-import com.opansoon.ops.domain.User;
-import com.opansoon.ops.repository.UserRepository;
-import com.opansoon.ops.security.oauth.*;
 import com.waither.security.oauth.CustomAuthentication;
 import com.waither.security.oauth.OAuthProcessingException;
 import com.waither.security.oauth.ProviderType;
+import com.waither.security.oauth.RoleType;
 import com.waither.security.oauth.userInfo.OAuth2UserInfo;
 import com.waither.security.oauth.userInfo.OAuth2UserInfoFactory;
+import com.waither.security.test.User;
+import com.waither.security.test.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

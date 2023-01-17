@@ -1,5 +1,6 @@
 package com.waither.security.oauth;
 
+import com.waither.security.test.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;

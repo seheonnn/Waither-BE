@@ -39,6 +39,32 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+  apple:
+    APPLE.AUTH.TOKEN.URL: https://appleid.apple.com/auth/token
+    APPLE.PUBLICKEY.URL: https://appleid.apple.com/auth/keys
+    APPLE.WEBSITE.URL: [ Website URLs ]
+    APPLE.ISS: https://appleid.apple.com
+    APPLE.AUD: [ Client ID ]
+    APPLE.TEAM.ID: [ Team ID ]
+    APPLE.KEY.ID: [ Key ID ]
+
+  mail:
+    smtp:
+      auth: true
+      starttls:
+        required: true
+        enable: true
+      socketFactory:
+        class: javax.net.ssl.SSLSocketFactory
+        fallback: false
+        port: 465
+      port: 465
+
+  AdminMail:
+    id: [ ID ]
+    password: [ PW ]
+
+
 
 
 logging:

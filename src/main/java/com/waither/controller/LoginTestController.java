@@ -1,5 +1,6 @@
 package com.waither.controller;
 
+import com.waither.domain.JsonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
