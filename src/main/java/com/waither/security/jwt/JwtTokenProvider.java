@@ -1,64 +1,49 @@
 package com.waither.security.jwt;
 
+import com.waither.security.oauth.CustomAuthentication;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Component
 public class JwtTokenProvider {
+
     private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60; //1H
     private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 14; //2WEEK
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512); //yml에 설정
 
+
     //accessToken 생성
-//    public String createAccessToken(Authentication authentication, Long expiration) {
-//
-//        Date now = new Date();
-//        Date validity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH); //token 만료 시간 설정
-
-
-//        assert authentication != null;
-
-//        OAuth2UserInfoIf oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo((OAuth2AuthenticationToken) authentication);
-//        String provider = oAuth2UserInfo.getProvider().toString();
-//        String uid = oAuth2UserInfo.getId();
-//        String email = oAuth2UserInfo.getEmail();
-
-//        List<String> authorities = authentication.getAuthorities()
-//                .stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.toList());
-//
-//
-//        return Jwts.builder()
-//                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-//                .setSubject(uid)
-//                .claim(PROVIDER, provider)
-//                .claim(EMAIL, email)
-//                .claim(AUTHORITY, authorities)
-//                .setIssuedAt(now)
-//                .setExpiration(expiryDate)
-//                .signWith(SECRET_KEY)
-//                .compact();
-//    }
-
-
-    public String createToken(String payload) {
-        Claims claims = Jwts.claims().setSubject(payload);
+    public String createAccessToken(Authentication authentication) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH);
+
+        CustomAuthentication user = (CustomAuthentication) authentication.getPrincipal();
+
+        String userEmail = user.getEmail();
+        String role = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .setSubject(userEmail)
+                .claim("role", role)
+                .setIssuedAt(now) //token 발행 시간
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
@@ -68,33 +53,12 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_LENGTH);
 
-//        String refreshToken = Jwts.builder()
-//                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-//                .setIssuer("debrains")
-//                .setIssuedAt(now)
-//                .setExpiration(validity)
-//                .compact();
-
+        String refreshToken = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .compact();
     }
-
-
-    //refreshToken 저장
-    private void saveRefreshToken(Authentication authentication, String refreshToken) {
-    }
-
-    //accessToken 검사 후 Authentication 객체 생성
-//    public Authentication getAuthentication(String accessToken) {
-//        Claims claims = parseClaims(accessToken);
-//
-//        Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
-//
-//        User principal = new User(claims.getSubject(), "", authorities);
-//
-//        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-//    }
 
     //token 유효성 검증
     public Boolean validateToken(String token) {
@@ -119,12 +83,25 @@ public class JwtTokenProvider {
         return false;
     }
 
-    // accessToken 만료 시 갱신 때 사용할 정보를 얻기 위해 Claim return
-//    private Claims parseClaims(String accessToken) {
-//        try {
-//            return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(accessToken).getBody();
-//        } catch (ExpiredJwtException e) {
-//            return e.getClaims();
-//        }
-//    }
+    // Access Token을 검사하고 얻은 정보로 Authentication 객체 생성
+    public Authentication getAuthentication(String accessToken) {
+        Claims claims = parseClaims(accessToken);
+//
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get("role").toString().split(","))
+                        .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
+        CustomAuthentication authentication = new CustomAuthentication("", claims.getSubject(), authorities);
+
+        return new UsernamePasswordAuthenticationToken("", authentication, authorities);
+    }
+
+    // Access Token 만료시 갱신때 사용할 정보를 얻기 위해 Claim 리턴
+    private Claims parseClaims(String accessToken) {
+        try {
+            return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(accessToken).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
 }
