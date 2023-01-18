@@ -23,6 +23,8 @@ public class AlarmController {
     @Autowired
     AlarmService alarmService;
 
+    // 8 알람
+
     // 9 전체 알람 조회
     @ResponseBody
     @GetMapping("")
