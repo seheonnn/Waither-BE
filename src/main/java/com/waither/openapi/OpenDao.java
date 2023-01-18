@@ -139,8 +139,6 @@ public class OpenDao {
         /*String nx = getWeatherReq.getX();
         String ny = getWeatherReq.getY();*/
 
-
-
         /*// 요청 xy좌표 대입
         String nx = "55";
         String ny = "127";*/
@@ -245,7 +243,7 @@ public class OpenDao {
         System.out.println("날짜 출력"+dto.getDate());
         System.out.println("수신 온도 출력"+dto.getTmp());
         //dto에 담기까지 완료
-        return null;
+        return dto;
     }
 
     //초단기 예보조회
