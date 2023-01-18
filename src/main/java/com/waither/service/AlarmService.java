@@ -20,7 +20,7 @@ public class AlarmService {
 
     // 9 전체 알람 조회
     public List<AlarmEntity> myAlarmList(Long userIdx) {
-        return alarmRepository.findAllByUserId(userIdx);
+        return alarmRepository.findAllByUserIdx(userIdx);
     }
 
     // 10 알람 삭제
