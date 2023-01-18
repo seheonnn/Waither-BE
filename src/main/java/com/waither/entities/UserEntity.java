@@ -3,6 +3,7 @@ package com.waither.entities;
 import com.waither.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.userdetails.User;
 
 import java.sql.Timestamp;
@@ -36,36 +37,46 @@ public class UserEntity {
     private Timestamp outTime;
 
     @Column(name = "outAlarm", nullable = false)
+    @ColumnDefault("Y")
     private char outAlarm;
 
     @Column(name = "climateAlarm", nullable = false)
+    @ColumnDefault("Y")
     private char climateAlarm;
 
     @Column(name = "customAlarm", nullable = false)
+    @ColumnDefault("Y")
     private char customAlarm;
 
     @Column(name = "rainAlarm", nullable = false)
+    @ColumnDefault("Y")
     private char rainAlarm;
 
     @Column(name = "snowAlarm", nullable = false)
+    @ColumnDefault("Y")
     private char snowAlarm;
 
     @Column(name = "windAlarm", nullable = false)
+    @ColumnDefault("Y")
     private char windAlarm;
 
     @Column(name = "windValue", nullable = false)
     private Integer windValue;
 
     @Column(name = "rainFall", nullable = false)
+    @ColumnDefault("Y")
     private char rainFall;
 
     @Column(name = "dust", nullable = false)
+    @ColumnDefault("Y")
     private char dust;
 
     @Column(name = "wind", nullable = false)
+    @ColumnDefault("Y")
     private char wind;
 
     @Column(name = "status", nullable = false)
+    @ColumnDefault("A")
     private char status;
 
     @Column(name = "updatedAt")
@@ -90,24 +101,31 @@ public class UserEntity {
     private double veryHot;
 
     @Column(name = "Sun", nullable = false)
+    @ColumnDefault("Y")
     private char Sun;
 
     @Column(name = "Mon", nullable = false)
+    @ColumnDefault("Y")
     private char Mon;
 
     @Column(name = "Tue", nullable = false)
+    @ColumnDefault("Y")
     private char Tue;
 
     @Column(name = "Wed", nullable = false)
+    @ColumnDefault("Y")
     private char Wed;
 
     @Column(name = "Thu", nullable = false)
+    @ColumnDefault("Y")
     private char Thu;
 
     @Column(name = "Fri", nullable = false)
+    @ColumnDefault("Y")
     private char Fri;
 
     @Column(name = "Sat", nullable = false)
+    @ColumnDefault("Y")
     private char Sat;
 
     public UserDTO toDTO() {
