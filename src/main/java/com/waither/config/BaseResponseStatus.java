@@ -1,18 +1,25 @@
-/*
 package com.waither.config;
 
 import lombok.Getter;
+
+/**
+ * 에러 코드 관리
+ */
 @Getter
-public class BaseResponseStatus {
-    //200 로딩성공
-    SUCCESS(true, 200, "로딩 성공");
+public enum BaseResponseStatus {
+    /**
+     * 200 : 요청 성공
+     */
+    SUCCESS(true, 200, "로딩 성공"),
 
-    //400 파라미터 오류
-    */
-/*REQUEST_ERROR(false, 400, "파라미터 오류"),
+
+    /**
+     * 400 : Request 오류
+     */
+    REQUEST_ERROR(false, 400, "파라미터 오류"),
+
     //500 서버 오류
-    SERVER_ERROR(false, 500, "서버 오류");*//*
-
+    SERVER_ERROR(false, 500, "서버 오류");
 
     private final boolean isSuccess;
     private final int code;
@@ -24,4 +31,3 @@ public class BaseResponseStatus {
         this.message = message;
     }
 }
-*/

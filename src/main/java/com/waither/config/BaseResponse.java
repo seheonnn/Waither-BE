@@ -1,4 +1,3 @@
-/*
 package com.waither.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,4 +35,4 @@ public class BaseResponse<T> {//BaseResponse 객체를 사용할때 성공, 실�
     }
 }
 
-*/
+
