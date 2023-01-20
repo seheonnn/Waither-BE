@@ -30,7 +30,14 @@ public class UserEntity {
     @Column(name = "pw", nullable = false)
     private String pw;
 
-    //token
+    @Column(name = "refreshToken") // 로그인 토큰
+    private String refreshToken;
+
+    @Column(name = "provider") // 로그인 형태 (ex: 카카오, 애플 ...)
+    private String provider;
+
+    @Column(name = "role", nullable = false) // User, Guest
+    private String role;
 
     @Column(name = "outTime", nullable = false)
     private Timestamp outTime;
@@ -132,6 +139,9 @@ public class UserEntity {
                 .userName(userName)
                 .id(id)
                 .pw(pw)
+                .refreshToken(refreshToken)
+                .provider(provider)
+                .role(provider)
                 .outTime(outTime)
                 .outAlarm(outAlarm)
                 .climateAlarm(climateAlarm)

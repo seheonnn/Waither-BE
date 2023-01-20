@@ -1,5 +1,6 @@
 package com.waither.service;
 
+import com.waither.SensibleTemp;
 import com.waither.dao.UserDAO;
 import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
@@ -24,14 +25,22 @@ public class UserService implements UserDAO {
     }
 
     // 7 설문 답변 저장
-    public boolean savedSurvey(Long userIdx, double veryCold, double cold, double good, double hot, double veryHot, Timestamp outTime) {
+    public boolean savedSurvey(Long userIdx, String type, Double value) {
         UserEntity userData = userRepository.findById(userIdx).get();
-        userData.setVeryCold(veryCold);
-        userData.setCold(cold);
-        userData.setGood(good);
-        userData.setHot(hot);
-        userData.setVeryHot(veryHot);
-        userData.setOutTime(outTime);
+//        value = SensibleTemp.calculateTemp(value, // 풍속, // 습도) // 받은 온도를 체감온도로 변환
+        if (type.equals("veryHot")) {
+            userData.setVeryHot(value);
+        } else if (type.equals("hot")) {
+            userData.setHot(value);
+        } else if (type.equals("good")) {
+            userData.setGood(value);
+        } else if (type.equals("cold")) {
+            userData.setCold(value);
+        } else if (type.equals("veryCold")) {
+            userData.setVeryCold(value);
+        } else {
+            return false;
+        }
         return true;
     }
 

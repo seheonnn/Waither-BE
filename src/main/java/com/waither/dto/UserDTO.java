@@ -21,7 +21,11 @@ public class UserDTO {
 
     private String pw;
 
-    //token
+    private String refreshToken;
+
+    private String provider;
+
+    private String role;
 
     private Timestamp outTime;
 
@@ -80,6 +84,9 @@ public class UserDTO {
                 .userName(userName)
                 .id(id)
                 .pw(pw)
+                .refreshToken(refreshToken)
+                .provider(provider)
+                .role(role)
                 .outTime(outTime)
                 .outAlarm(outAlarm)
                 .climateAlarm(climateAlarm)

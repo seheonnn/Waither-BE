@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -31,12 +30,10 @@ public class UserController {
     // 7 설문 답변 저장
     @ResponseBody
     @PostMapping("/survey")
-    public ResponseEntity<Void> savedSurvey(@RequestParam("userIdx") Long userIdx, @RequestBody double veryCold, double cold, double good, double hot, double veryHot, Timestamp outTime) {
-        if (userService.savedSurvey(userIdx, veryCold, cold, good, hot, veryHot, outTime)) {
-            UserEntity userEntity = userRepository.findById(userIdx).get();
+    public ResponseEntity<Void> savedSurvey(@RequestParam("userIdx") Long userIdx, @RequestBody String type, Double value) {
+        if (userService.savedSurvey(userIdx, type, value)) {
             return ResponseEntity.ok(null);
-        }
-        else {
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
