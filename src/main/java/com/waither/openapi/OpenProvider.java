@@ -17,16 +17,15 @@ public class OpenProvider {
 
     private final OpenDao openDao;
 
-    // 좌표값의 초단기 실황 조회
-    public GetWeatherRes getUltraSc(String x, String y) throws BaseException {
+    // 메인화면 날씨 데이터 조회(실황, 예보)
+    public GetWeatherRes getMainWea(String nx, String ny) throws BaseException {
         try {
-            GetWeatherRes getWeatherRes = openDao.getUltraSc(x, y);
+            GetWeatherRes getWeatherRes = openDao.getMainWea(nx, ny);
             return getWeatherRes;
         } catch (Exception exception) {
             throw new BaseException(SERVER_ERROR);
         }
     }
-
 
 
     // 과거 날씨데이터 조회-> 설문 저장에 사용
