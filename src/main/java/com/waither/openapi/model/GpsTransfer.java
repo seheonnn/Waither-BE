@@ -1,30 +1,52 @@
 package com.waither.openapi.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
-
-@Getter
-@Setter
 public class GpsTransfer {
-
     private double lat; //gps로 반환받은 위도
     private double lon; //gps로 반환받은 경도
 
-    private double xLat; //x좌표
-    private double yLon; //y좌표
-
-    public GpsTransfer() {
-    }
+    private double xLat; //x좌표로 변환된 위도
+    private double yLon; //y좌표로 변환된 경도
+    public GpsTransfer() {}
 
     public GpsTransfer(double lat, double lon) {
         this.lat = lat;
         this.lon = lon;
     }
 
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public double getxLat() {
+        return xLat;
+    }
+
+    public double getyLon() {
+        return yLon;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public void setxLat(double xLat) {
+        this.xLat = xLat;
+    }
+
+    public void setyLon(double yLon) {
+        this.yLon = yLon;
+    }
 
     //x,y좌표로 변환해주는것
-    public void transfer(GpsTransfer gpt, int mode) {
+    public static void transfer(GpsTransfer gpt, int mode){
 
         double RE = 6371.00877; // 지구 반경(km)
         double GRID = 5.0; // 격자 간격(km)
@@ -38,7 +60,6 @@ public class GpsTransfer {
         //
         // LCC DFS 좌표변환 ( code : "TO_GRID"(위경도->좌표, lat_X:위도,  lng_Y:경도), "TO_GPS"(좌표->위경도,  lat_X:x, lng_Y:y) )
         //
-
 
         double DEGRAD = Math.PI / 180.0;
         double RADDEG = 180.0 / Math.PI;
@@ -71,7 +92,8 @@ public class GpsTransfer {
             gpt.setyLon(y);
 //            rs.x = Math.floor(ra * Math.sin(theta) + XO + 0.5);
 //            rs.y = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
-        } else {
+        }
+        else {
 //            rs.x = lat_X; //기존의 x좌표
 //            rs.y = lng_Y; //기존의 경도
             double xlat = gpt.getxLat();
@@ -88,13 +110,15 @@ public class GpsTransfer {
             double theta = 0.0;
             if (Math.abs(xn) <= 0.0) {
                 theta = 0.0;
-            } else {
+            }
+            else {
                 if (Math.abs(yn) <= 0.0) {
                     theta = Math.PI * 0.5;
                     if (xn < 0.0) {
                         theta = -theta;
                     }
-                } else theta = Math.atan2(xn, yn);
+                }
+                else theta = Math.atan2(xn, yn);
             }
             double alon = theta / sn + olon;
 //            rs.lat = alat * RADDEG; //gps 좌표 위도
@@ -104,27 +128,8 @@ public class GpsTransfer {
         }
     }
 
-    private double getyLon() {
-        return  yLon;
-    }
-
-    private double getxLat() {
-        return  xLat;
-    }
-
-    private void setyLon(double y) {
-    }
-
-    private void setxLat(double x) {
-    }
-
     @Override
     public String toString() {
-        return "GpsTransfer{" +
-                "lat=" + lat +
-                ", lon=" + lon +
-                ", xLat=" + xLat +
-                ", yLon=" + yLon +
-                '}';
+        return "Lat=" + lat + "Lon=" +  lon+"xLat=" + xLat + "yLon=" +  yLon;
     }
 }

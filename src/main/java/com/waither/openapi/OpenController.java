@@ -20,6 +20,8 @@ public class OpenController {
         this.openProvider = openProvider;
     }
 
+    GpsTransfer gpt = new GpsTransfer();
+
     /*메인화면에 필요한 데이터 반환
     요청: x, y 좌표
     응답: GetWeatherRes
@@ -28,7 +30,14 @@ public class OpenController {
     public BaseResponse<GetWeatherRes> getWeather(@RequestParam("x") String x, @RequestParam("y") String y) throws Exception{
         try {
             //log.info("startttt");
-            GetWeatherRes getWeatherRes = openProvider.getUltraSc(x,y);
+            //위경도값 좌표로 변환
+            gpt.setLat(Double.parseDouble(x));
+            gpt.setLon(Double.parseDouble(y));
+            gpt.transfer(gpt,0);
+            String nx = String.valueOf((int)gpt.getxLat());
+            String ny = String.valueOf((int)gpt.getyLon());
+            //
+            GetWeatherRes getWeatherRes = openProvider.getMainWea(nx,ny);
             return new BaseResponse<>(getWeatherRes);
         } catch (BaseException exception) {
             //log.info("star");
