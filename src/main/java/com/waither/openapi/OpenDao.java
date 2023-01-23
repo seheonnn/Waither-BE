@@ -1,5 +1,6 @@
 package com.waither.openapi;
 
+import com.waither.openapi.model.GetPastWeatherRes;
 import com.waither.openapi.model.GetWeatherReq;
 import com.waither.openapi.model.GetWeatherRes;
 import org.json.simple.JSONArray;
@@ -244,6 +245,68 @@ public class OpenDao {
         System.out.println("수신 온도 출력"+dto.getTmp());
         //dto에 담기까지 완료
         return dto;
+    }
+
+    //미세먼지 실황 조회
+    public GetPastWeatherRes getPastWea(String date, String time, String region) throws Exception{
+
+        GetPastWeatherRes pastDto = new GetPastWeatherRes();
+        // 변수 설정
+        //초단기 실황 조회
+        String apiURL = "http://apis.data.go.kr/1360000/AsosHourlyInfoService/getWthrDataList";
+        String authKey = "Xs2%2Frnfl80eyOtrEWs0Y4yBvqtH0Fv2LH5yDf836On7erI0qnhiIOBArWJAMTEiTfd5M4D%2B8WUVtXkU5EhGMJw%3D%3D"; // 개인 서비스 키
+
+        StringBuilder urlBuilder = new StringBuilder(apiURL);
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + authKey);
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호 Default : 10*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수 Default : 1*/
+        urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*요청자료형식(XML/JSON) Default : XML*/
+        urlBuilder.append("&" + URLEncoder.encode("dataCd","UTF-8") + "=" + URLEncoder.encode("ASOS", "UTF-8")); /*자료 분류 코드(ASOS)*/
+        urlBuilder.append("&" + URLEncoder.encode("dateCd","UTF-8") + "=" + URLEncoder.encode("HR", "UTF-8")); /*날짜 분류 코드(HR)*/
+        urlBuilder.append("&" + URLEncoder.encode("startDt","UTF-8") + "=" + URLEncoder.encode(date, "UTF-8")); /*조회 기간 시작일(YYYYMMDD)*/
+        urlBuilder.append("&" + URLEncoder.encode("startHh","UTF-8") + "=" + URLEncoder.encode(time, "UTF-8")); /*조회 기간 시작시(HH)*/
+        urlBuilder.append("&" + URLEncoder.encode("endDt","UTF-8") + "=" + URLEncoder.encode(date, "UTF-8")); /*조회 기간 종료일(YYYYMMDD) (전일(D-1) 까지 제공)*/
+        urlBuilder.append("&" + URLEncoder.encode("endHh","UTF-8") + "=" + URLEncoder.encode(time, "UTF-8")); /*조회 기간 종료시(HH)*/
+        urlBuilder.append("&" + URLEncoder.encode("stnIds","UTF-8") + "=" + URLEncoder.encode(region, "UTF-8")); /*종관기상관측 지점 번호 (활용가이드 하단 첨부 참조)*/
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        System.out.println("Response code: " + conn.getResponseCode());
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        String result = sb.toString();
+        //데이터 수신완료
+        System.out.println(result);
+
+        //json 파싱
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jObject =  (JSONObject) jsonParser.parse(result);
+        JSONObject response = (JSONObject) jObject.get("response");
+        JSONObject body = (JSONObject) response.get("body");
+        JSONObject items = (JSONObject) body.get("items");
+        JSONArray jArray = (JSONArray) items.get("item");
+
+        for(int i = 0; i < jArray.size(); i++) {
+            JSONObject obj = (JSONObject) jArray.get(i);
+            //캐스팅 변환이 아니라 String 클래스의 valueOf(Object)로 가져오기
+            double ta = Double.valueOf((String) obj.get("ta"));
+            pastDto.setTmp(ta);
+        }
+        System.out.println("날짜 출력 과거과거과거"+pastDto.getTmp());
+        //dto에 담기까지 완료
+        return pastDto;
     }
 
     //초단기 예보조회
