@@ -92,19 +92,19 @@ public class UserEntity {
     private Timestamp createdAt;
 
     @Column(name = "veryCold", nullable = false)
-    private double veryCold;
+    private Integer veryCold;
 
     @Column(name = "cold", nullable = false)
-    private double cold;
+    private Integer cold;
 
     @Column(name = "good", nullable = false)
-    private double good;
+    private Integer good;
 
     @Column(name = "hot", nullable = false)
-    private double hot;
+    private Integer hot;
 
     @Column(name = "veryHot", nullable = false)
-    private double veryHot;
+    private Integer veryHot;
 
     @Column(name = "Sun", nullable = false)
     @ColumnDefault("'Y'")

@@ -30,7 +30,7 @@ public class UserController {
     // 7 설문 답변 저장
     @ResponseBody
     @PostMapping("/survey")
-    public ResponseEntity<Void> savedSurvey(@RequestParam("userIdx") Long userIdx, @RequestBody String type, Double value) {
+    public ResponseEntity<Void> savedSurvey(@RequestParam("userIdx") Long userIdx, @RequestBody String type, Integer value) {
         if (userService.savedSurvey(userIdx, type, value)) {
             return ResponseEntity.ok(null);
         } else {
@@ -75,7 +75,7 @@ public class UserController {
     // 14 사용자 설정 데이터 변경
     @ResponseBody
     @PostMapping("/settings/userdata")
-    public ResponseEntity<Void> updateUserData(@RequestParam("userIdx") Long userIdx, @RequestBody String type, Double value) {
+    public ResponseEntity<Void> updateUserData(@RequestParam("userIdx") Long userIdx, @RequestBody String type, Integer value) {
         if (userService.updateUserData(userIdx, type, value)) {
             return ResponseEntity.ok(null);
         } else {

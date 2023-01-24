@@ -1,9 +1,9 @@
 package com.waither.mapping;
 
 public interface UserDataMapping {
-    Double getVeryHot();
-    Double getHot();
-    Double getGood();
-    Double getCold();
-    Double getVeryCold();
+    Integer getVeryHot();
+    Integer getHot();
+    Integer getGood();
+    Integer getCold();
+    Integer getVeryCold();
 }

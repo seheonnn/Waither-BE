@@ -1,6 +1,5 @@
 package com.waither.service;
 
-import com.waither.SensibleTemp;
 import com.waither.dao.UserDAO;
 import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Optional;
 
+import static org.hibernate.Hibernate.size;
+
 @Service
 public class UserService implements UserDAO {
 
@@ -25,9 +26,9 @@ public class UserService implements UserDAO {
     }
 
     // 7 설문 답변 저장
-    public boolean savedSurvey(Long userIdx, String type, Double value) {
+    public boolean savedSurvey(Long userIdx, String type, Integer value) {
         UserEntity userData = userRepository.findById(userIdx).get();
-//        value = SensibleTemp.calculateTemp(value, // 풍속, // 습도) // 받은 온도를 체감온도로 변환
+//        value = SensibleTemp.calculateTemp(value, // 풍속, // 습도) // 받은 온도를 체감온도로 변환 -> 체감 온도 삭제
         if (type.equals("veryHot")) {
             userData.setVeryHot(value);
         } else if (type.equals("hot")) {
@@ -47,6 +48,7 @@ public class UserService implements UserDAO {
     // 11 설정 메인화면 조회
     public Optional<MainDataMapping> getMainData(Long userIdx) {
         Optional<MainDataMapping> mainData = userRepository.findMainData(userIdx);
+
         return mainData;
     }
 
@@ -64,12 +66,33 @@ public class UserService implements UserDAO {
     }
     // 13 사용자 설정 데이터 조회
     public Optional<UserDataMapping> getUserData(Long userIdx) {
+        int sumVH = 0;
+        int sumH = 0;
+        int sumG = 0;
+        int sumC = 0;
+        int sumVC = 0;
         Optional<UserDataMapping> userData = userRepository.findUserData(userIdx);
+
+        int s = size(userRepository.findAll());
+        for (UserEntity userEntity : userRepository.findAll()) {
+            sumVH += userEntity.getVeryHot();
+            sumH += userEntity.getHot();
+            sumG += userEntity.getGood();
+            sumC += userEntity.getCold();
+            sumVC += userEntity.getVeryCold();
+        }
+
+        int avgVH = sumVH / s;
+        int avgH = sumH / s;
+        int avgG = sumG / s;
+        int avgC = sumC / s;
+        int avgVC = sumVC / s;
+
         return userData;
     }
 
     // 14 사용자 설정 데이터 변경
-    public boolean updateUserData(Long userIdx, String type, Double value) {
+    public boolean updateUserData(Long userIdx, String type, Integer value) {
         UserEntity userData = userRepository.findById(userIdx).get();
         if (type.equals("veryHot")) {
             userData.setVeryHot(value);

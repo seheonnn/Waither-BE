@@ -55,15 +55,15 @@ public class UserDTO {
 
     private Timestamp createdAt;
 
-    private double veryCold;
+    private Integer veryCold;
 
-    private double cold;
+    private Integer cold;
 
-    private double good;
+    private Integer good;
 
-    private double hot;
+    private Integer hot;
 
-    private double veryHot;
+    private Integer veryHot;
 
     private char Sun;
 
