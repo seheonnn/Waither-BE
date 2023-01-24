@@ -29,14 +29,14 @@ public class AlarmController {
     @ResponseBody
     @GetMapping("")
     public ResponseEntity<Map<String, Object>> myAlarmList(@RequestParam("userIdx") Long userIdx) {
-        try {
-            List<AlarmEntity> list = alarmService.myAlarmList(userIdx);
-            Map<String, Object> map = new HashMap<>();
-            map.put("alarmlist", list);
-            return ResponseEntity.ok(map);
-        } catch (Exception e) {
+
+        List<AlarmEntity> list = alarmService.myAlarmList(userIdx);
+        Map<String, Object> map = new HashMap<>();
+        map.put("alarmlist", list);
+        if (map.isEmpty())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        else
+            return ResponseEntity.ok(map);
     }
 
 

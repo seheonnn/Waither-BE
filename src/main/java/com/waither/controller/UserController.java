@@ -42,12 +42,11 @@ public class UserController {
     @ResponseBody
     @GetMapping("/settings")
     public ResponseEntity<Optional<MainDataMapping>> getMainData(@RequestParam("userIdx") Long userIdx) {
-        try {
-            Optional<MainDataMapping> mainData = userService.getMainData(userIdx);
+        Optional<MainDataMapping> mainData = userService.getMainData(userIdx);
+        if (mainData.isPresent())
             return ResponseEntity.ok(mainData);
-        } catch (Exception e) {
+        else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
     }
 
     // 12 설정 메인화면 변경
@@ -64,12 +63,13 @@ public class UserController {
     @ResponseBody
     @GetMapping("/settings/userdata")
     public ResponseEntity<Optional<UserDataMapping>> getUserData(@RequestParam("userIdx") Long userIdx) {
-        try {
-            Optional<UserDataMapping> userData = userService.getUserData(userIdx);
+
+        Optional<UserDataMapping> userData = userService.getUserData(userIdx);
+        if (userData.isPresent())
             return ResponseEntity.ok(userData);
-        } catch (Exception e) {
+        else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+
     }
 
     // 14 사용자 설정 데이터 변경
@@ -87,12 +87,11 @@ public class UserController {
     @ResponseBody
     @GetMapping("/settings/alarm")
     public ResponseEntity<Optional<UserAlarmMapping>> getAlarmData(@RequestParam("userIdx") Long userIdx) {
-        try {
-            Optional<UserAlarmMapping> userAlarmData = userService.getAlarmData(userIdx);
+        Optional<UserAlarmMapping> userAlarmData = userService.getAlarmData(userIdx);
+        if (userAlarmData.isPresent())
             return ResponseEntity.ok(userAlarmData);
-        } catch (Exception e) {
+        else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
     }
 
     //16 알람 설정 변경
@@ -110,12 +109,11 @@ public class UserController {
     @ResponseBody
     @GetMapping("/settings/alarm/wind")
     public ResponseEntity<Optional<WindAlarmMapping>> getWindAlarm(@RequestParam("userIdx") Long userIdx) {
-        try {
-            Optional<WindAlarmMapping> userWindAlarm = userService.getWindAlarm(userIdx);
+        Optional<WindAlarmMapping> userWindAlarm = userService.getWindAlarm(userIdx);
+        if (userWindAlarm.isPresent())
             return ResponseEntity.ok(userWindAlarm);
-        } catch (Exception e) {
+        else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
     }
 
     // 18 사용자 바람 세기 설정 변경
