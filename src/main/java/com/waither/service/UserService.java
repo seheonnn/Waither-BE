@@ -26,7 +26,7 @@ public class UserService {
     // 7 설문 답변 저장
     public boolean savedSurvey(Long userIdx, String type, Integer value) {
         UserEntity userData = userRepository.findById(userIdx).get();
-//        value = SensibleTemp.calculateTemp(value, // 풍속, // 습도) // 받은 온도를 체감온도로 변환 -> 체감 온도 삭제
+
         if (type.equals("veryHot")) {
             userData.setVeryHot(value);
         } else if (type.equals("hot")) {
@@ -64,35 +64,36 @@ public class UserService {
     }
     // 13 사용자 설정 데이터 조회
     public UserData getUserData(Long userIdx) {
-        int sumVH = 0;
-        int sumH = 0;
-        int sumG = 0;
-        int sumC = 0;
         int sumVC = 0;
+        int sumC = 0;
+        int sumG = 0;
+        int sumH = 0;
+        int sumVH = 0;
 
         Optional<UserEntity> user = userRepository.findById(userIdx);
-//        Optional<UserDataMapping> userData = userRepository.findUserData(userIdx);
+
         UserData ud = new UserData();
 
         int s = size(userRepository.findAll());
         for (UserEntity userEntity : userRepository.findAll()) {
-            sumVH += userEntity.getVeryHot();
-            sumH += userEntity.getHot();
-            sumG += userEntity.getGood();
-            sumC += userEntity.getCold();
             sumVC += userEntity.getVeryCold();
+            sumC += userEntity.getCold();
+            sumG += userEntity.getGood();
+            sumH += userEntity.getHot();
+            sumVH += userEntity.getVeryHot();
         }
-        ud.setVeryHot(user.get().getVeryHot());
-        ud.setHot(user.get().getHot());
-        ud.setGood(user.get().getGood());
-        ud.setCold(user.get().getCold());
-        ud.setVeryCold(user.get().getVeryCold());
 
-        ud.setAvgVH(sumVH / s);
-        ud.setAvgH(sumH / s);
-        ud.setAvgG(sumG / s);
-        ud.setAvgC(sumC / s);
+        ud.setVeryCold(user.get().getVeryCold());
+        ud.setCold(user.get().getCold());
+        ud.setGood(user.get().getGood());
+        ud.setHot(user.get().getHot());
+        ud.setVeryHot(user.get().getVeryHot());
+
         ud.setAvgVC(sumVC / s);
+        ud.setAvgC(sumC / s);
+        ud.setAvgG(sumG / s);
+        ud.setAvgH(sumH / s);
+        ud.setAvgVH(sumVH / s);
 
 
         return ud;
