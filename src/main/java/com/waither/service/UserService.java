@@ -1,22 +1,20 @@
 package com.waither.service;
 
-import com.waither.dao.UserDAO;
+import com.waither.entities.UserData;
 import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
-import com.waither.mapping.UserDataMapping;
 import com.waither.mapping.WindAlarmMapping;
 import com.waither.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.Optional;
 
 import static org.hibernate.Hibernate.size;
 
 @Service
-public class UserService implements UserDAO {
+public class UserService {
 
     private UserRepository userRepository;
 
@@ -65,13 +63,16 @@ public class UserService implements UserDAO {
             return false;
     }
     // 13 사용자 설정 데이터 조회
-    public Optional<UserDataMapping> getUserData(Long userIdx) {
+    public UserData getUserData(Long userIdx) {
         int sumVH = 0;
         int sumH = 0;
         int sumG = 0;
         int sumC = 0;
         int sumVC = 0;
-        Optional<UserDataMapping> userData = userRepository.findUserData(userIdx);
+
+        Optional<UserEntity> user = userRepository.findById(userIdx);
+//        Optional<UserDataMapping> userData = userRepository.findUserData(userIdx);
+        UserData ud = new UserData();
 
         int s = size(userRepository.findAll());
         for (UserEntity userEntity : userRepository.findAll()) {
@@ -81,14 +82,20 @@ public class UserService implements UserDAO {
             sumC += userEntity.getCold();
             sumVC += userEntity.getVeryCold();
         }
+        ud.setVeryHot(user.get().getVeryHot());
+        ud.setHot(user.get().getHot());
+        ud.setGood(user.get().getGood());
+        ud.setCold(user.get().getCold());
+        ud.setVeryCold(user.get().getVeryCold());
 
-        int avgVH = sumVH / s;
-        int avgH = sumH / s;
-        int avgG = sumG / s;
-        int avgC = sumC / s;
-        int avgVC = sumVC / s;
+        ud.setAvgVH(sumVH / s);
+        ud.setAvgH(sumH / s);
+        ud.setAvgG(sumG / s);
+        ud.setAvgC(sumC / s);
+        ud.setAvgVC(sumVC / s);
 
-        return userData;
+
+        return ud;
     }
 
     // 14 사용자 설정 데이터 변경

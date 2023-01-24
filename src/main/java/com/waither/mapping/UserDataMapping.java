@@ -6,4 +6,6 @@ public interface UserDataMapping {
     Integer getGood();
     Integer getCold();
     Integer getVeryCold();
+
+
 }

@@ -3,7 +3,9 @@ package com.waither.dto;
 import com.waither.entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.w3c.dom.html.HTMLImageElement;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 @Data
@@ -17,6 +19,8 @@ public class UserDTO {
 
     private String userName;
 
+    private String email;
+
     private String id;
 
     private String pw;
@@ -27,7 +31,7 @@ public class UserDTO {
 
     private String role;
 
-    private Timestamp outTime;
+    private Time outTime;
 
     private char outAlarm;
 
@@ -82,11 +86,12 @@ public class UserDTO {
     public UserEntity toEntity() {
         return UserEntity.builder()
                 .userName(userName)
+//                .email(email)
                 .id(id)
                 .pw(pw)
-                .refreshToken(refreshToken)
-                .provider(provider)
-                .role(role)
+//                .refreshToken(refreshToken)
+//                .provider(provider)
+//                .role(role)
                 .outTime(outTime)
                 .outAlarm(outAlarm)
                 .climateAlarm(climateAlarm)

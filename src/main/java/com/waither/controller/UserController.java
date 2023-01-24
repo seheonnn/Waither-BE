@@ -1,21 +1,17 @@
 package com.waither.controller;
 
-import com.waither.dto.UserDTO;
-import com.waither.entities.UserEntity;
+import com.waither.entities.UserData;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
-import com.waither.mapping.UserDataMapping;
 import com.waither.mapping.WindAlarmMapping;
 import com.waither.repository.UserRepository;
 import com.waither.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.Optional;
 
 @RestController
@@ -62,10 +58,10 @@ public class UserController {
     // 13 사용자 설정 데이터 조회
     @ResponseBody
     @GetMapping("/settings/userdata")
-    public ResponseEntity<Optional<UserDataMapping>> getUserData(@RequestParam("userIdx") Long userIdx) {
+    public ResponseEntity<UserData> getUserData(@RequestParam("userIdx") Long userIdx) {
 
-        Optional<UserDataMapping> userData = userService.getUserData(userIdx);
-        if (userData.isPresent())
+        UserData userData = userService.getUserData(userIdx);
+        if (userData != null)
             return ResponseEntity.ok(userData);
         else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
