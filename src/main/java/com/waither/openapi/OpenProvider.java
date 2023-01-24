@@ -27,7 +27,6 @@ public class OpenProvider {
         }
     }
 
-
     // 과거 날씨데이터 조회-> 설문 저장에 사용
     public GetPastWeatherRes getPastWea(String date, String time, String region) throws BaseException {
         try {

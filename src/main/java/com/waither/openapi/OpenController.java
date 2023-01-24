@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.waither.openapi.model.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Log4j2
 @RestController
 @RequestMapping("/app/main")
@@ -21,6 +24,8 @@ public class OpenController {
     }
 
     GpsTransfer gpt = new GpsTransfer();
+    RegionTransfer rpt = new RegionTransfer();
+
 
     /*메인화면에 필요한 데이터 반환
     요청: x, y 좌표
@@ -48,10 +53,12 @@ public class OpenController {
     /*설문데이터 저장할때 필요한 데이터 반환
     요청: 날짜, 시간, 지역이름
     응답: 기온 */
-    @GetMapping("/past/")
-    public GetPastWeatherRes getPastWeather(@RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("region") String region) throws Exception{
+    public GetPastWeatherRes getPastWeather(String date, String time, String region) throws Exception{
         try {
-            GetPastWeatherRes getPastWeatherRes = openProvider.getPastWea(date, time, region);
+            int re = rpt.get(region);
+            String reg = String.valueOf(re);
+            GetPastWeatherRes getPastWeatherRes = openProvider.getPastWea(date, time, reg);
+            //GetPastWeatherRes getPastWeatherRes = openProvider.getPastWea(date, time, region);
             return getPastWeatherRes;
         } catch (BaseException exception) {
             GetPastWeatherRes getPastWeatherRes = new GetPastWeatherRes();
@@ -59,5 +66,18 @@ public class OpenController {
         }
     }
 
-    
+    /*@GetMapping("/past/")
+    public GetPastWeatherRes getPastWeather(@RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("region") String region) throws Exception{
+        try {
+            int re = rpt.get(region);
+            String reg = String.valueOf(re);
+            GetPastWeatherRes getPastWeatherRes = openProvider.getPastWea(date, time, reg);
+            //GetPastWeatherRes getPastWeatherRes = openProvider.getPastWea(date, time, region);
+            return getPastWeatherRes;
+        } catch (BaseException exception) {
+            GetPastWeatherRes getPastWeatherRes = new GetPastWeatherRes();
+            return getPastWeatherRes;
+        }
+    }*/
+
 }
