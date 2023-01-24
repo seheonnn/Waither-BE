@@ -34,6 +34,8 @@ dependencies {
 	implementation 'org.json:json:20220924'*/
 	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	//일 최고,최저기온 크롤링-> jsoup HTML parser
+	implementation 'org.jsoup:jsoup:1.14.2'
 
 }
 
