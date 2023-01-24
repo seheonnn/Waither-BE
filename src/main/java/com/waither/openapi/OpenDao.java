@@ -29,7 +29,7 @@ public class OpenDao {
         //초단기 예보_기온
         getUltraFaTemp(nx,ny);
         //초단기 예보_강수량
-        //getUltraFaHu(x,y);
+        getUltraFaAm(nx,ny);
         //미세먼지
 
         return mainDto;
@@ -220,41 +220,37 @@ public class OpenDao {
         JSONObject items = (JSONObject) body.get("items");
         JSONArray jArray = (JSONArray) items.get("item");
 
+        System.out.println("배열사이즈는"+jArray.size());
+
         for(int i = 0; i < jArray.size(); i++) {
             JSONObject obj = (JSONObject) jArray.get(i);
-            int fcstTime = Integer.valueOf((String) obj.get("fcstTime"));
+            //int fcstTime = Integer.valueOf((String) obj.get("fcstTime"));
             String fcstValue = (String) obj.get("fcstValue");
             //double fcstValue = Double.valueOf((String) obj.get("fcstValue"));
 
-            System.out.println(fcstValue +"중"+ i);
-
-            if(fcstValue=="강수없음"){
-                
+            if(fcstValue.equals("강수없음")){
                 fcstValue="0";
-                System.out.println("강수없대");
             }
-            double humid = Double.parseDouble(fcstValue);
-            
-            if(fcstTime==(intTime+100)){
-                mainDto.setExpect_rn1(humid);
+
+            if(i==0){
+                mainDto.setExpect_rn1(fcstValue);
             }
-            else if(fcstTime==(intTime+200)) {
-                mainDto.setExpect_rn2(humid);
+            else if(i==1) {
+                mainDto.setExpect_rn2(fcstValue);
             }
-            else if(fcstTime==(intTime+300)) {
-                mainDto.setExpect_rn3(humid);
+            else if(i==2) {
+                mainDto.setExpect_rn3(fcstValue);
             }
-            else if(fcstTime==(intTime+400)) {
-                mainDto.setExpect_rn4(humid);
+            else if(i==3) {
+                mainDto.setExpect_rn4(fcstValue);
             }
-            else if(fcstTime==(intTime+500)) {
-                mainDto.setExpect_rn5(humid);
+            else if(i==4) {
+                mainDto.setExpect_rn5(fcstValue);
             }
-            else if(fcstTime==(intTime+600)) {
-                mainDto.setExpect_rn6(humid);
+            else if(i==5) {
+                mainDto.setExpect_rn6(fcstValue);
             }
         }
-
         return mainDto;
     }
 
