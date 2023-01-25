@@ -22,17 +22,17 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_sequence")
     private Long userIdx;
 
-    @Column(name = "name", nullable = false)
-    private String userName;
+//    @Column(name = "name", nullable = false)
+//    private String userName;
 
 //    @Column(name = "email", nullable = false)
 //    private String email;
 
-    @Column(name = "id", nullable = false)
-    private String id;
-
-    @Column(name = "pw", nullable = false)
-    private String pw;
+//    @Column(name = "id", nullable = false)
+//    private String id;
+//
+//    @Column(name = "pw", nullable = false)
+//    private String pw;
 
 //    @Column(name = "refreshToken") // 로그인 토큰
 //    private String refreshToken;
@@ -140,10 +140,10 @@ public class UserEntity {
 
     public UserDTO toDTO() {
         return UserDTO.builder()
-                .userName(userName)
+//                .userName(userName)
 //                .email(email)
-                .id(id)
-                .pw(pw)
+//                .id(id)
+//                .pw(pw)
 //                .refreshToken(refreshToken)
 //                .provider(provider)
 //                .role(provider)

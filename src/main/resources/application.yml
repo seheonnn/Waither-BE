@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://waither-db.cg9dqzfapqgp.ap-northeast-2.rds.amazonaws.com:3306/waither
+    username: waither
+    password: waither0330
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true

@@ -16,20 +16,20 @@ import java.sql.Timestamp;
 public class UserDTO {
 
     private Long userIdx;
-
-    private String userName;
-
-    private String email;
-
-    private String id;
-
-    private String pw;
-
-    private String refreshToken;
-
-    private String provider;
-
-    private String role;
+//
+//    private String userName;
+//
+//    private String email;
+//
+//    private String id;
+//
+//    private String pw;
+//
+//    private String refreshToken;
+//
+//    private String provider;
+//
+//    private String role;
 
     private Time outTime;
 
@@ -85,10 +85,10 @@ public class UserDTO {
 
     public UserEntity toEntity() {
         return UserEntity.builder()
-                .userName(userName)
+//                .userName(userName)
 //                .email(email)
-                .id(id)
-                .pw(pw)
+//                .id(id)
+//                .pw(pw)
 //                .refreshToken(refreshToken)
 //                .provider(provider)
 //                .role(role)
