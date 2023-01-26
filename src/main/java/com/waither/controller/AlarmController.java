@@ -1,12 +1,9 @@
 package com.waither.controller;
 
-import com.waither.dto.UserDTO;
 import com.waither.entities.AlarmEntity;
 import com.waither.service.AlarmService;
-import com.waither.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

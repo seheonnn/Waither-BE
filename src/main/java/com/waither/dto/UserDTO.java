@@ -1,12 +1,7 @@
 package com.waither.dto;
 
 import com.waither.entities.UserEntity;
-import jakarta.persistence.*;
 import lombok.*;
-import org.w3c.dom.html.HTMLImageElement;
-
-import java.sql.Time;
-import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -16,108 +11,30 @@ import java.sql.Timestamp;
 public class UserDTO {
 
     private Long userIdx;
-//
-//    private String userName;
-//
-//    private String email;
-//
-//    private String id;
-//
-//    private String pw;
-//
-//    private String refreshToken;
-//
-//    private String provider;
-//
-//    private String role;
 
-    private Time outTime;
+    private String userName;
 
-    private char outAlarm;
+    private String email;
 
-    private char climateAlarm;
+    private String id;
 
-    private char customAlarm;
+    private String pw;
 
-    private char rainAlarm;
+    private String refreshToken;
 
-    private char snowAlarm;
+    private String provider;
 
-    private char windAlarm;
-
-    private Integer windValue;
-
-    private char rainFall;
-
-    private char dust;
-
-    private char wind;
-
-    private char status;
-
-    private Timestamp updatedAt;
-
-    private Timestamp createdAt;
-
-    private Integer veryCold;
-
-    private Integer cold;
-
-    private Integer good;
-
-    private Integer hot;
-
-    private Integer veryHot;
-
-    private char Sun;
-
-    private char Mon;
-
-    private char Tue;
-
-    private char Wed;
-
-    private char Thu;
-
-    private char Fri;
-
-    private char Sat;
+    private String role;
 
     public UserEntity toEntity() {
         return UserEntity.builder()
-//                .userName(userName)
-//                .email(email)
-//                .id(id)
-//                .pw(pw)
-//                .refreshToken(refreshToken)
-//                .provider(provider)
-//                .role(role)
-                .outTime(outTime)
-                .outAlarm(outAlarm)
-                .climateAlarm(climateAlarm)
-                .customAlarm(customAlarm)
-                .rainAlarm(rainAlarm)
-                .snowAlarm(snowAlarm)
-                .windAlarm(windAlarm)
-                .windValue(windValue)
-                .rainFall(rainFall)
-                .dust(dust)
-                .wind(wind)
-                .status(status)
-                .updatedAt(updatedAt)
-                .createdAt(createdAt)
-                .veryCold(veryCold)
-                .cold(cold)
-                .good(good)
-                .hot(hot)
-                .veryHot(veryHot)
-                .Sun(Sun)
-                .Mon(Mon)
-                .Tue(Tue)
-                .Wed(Wed)
-                .Thu(Thu)
-                .Fri(Fri)
-                .Sat(Sat)
+                .userName(userName)
+                .email(email)
+                .id(id)
+                .pw(pw)
+                .refreshToken(refreshToken)
+                .provider(provider)
+                .role(role)
                 .build();
     }
 

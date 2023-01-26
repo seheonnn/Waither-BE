@@ -1,10 +1,9 @@
 package com.waither.controller;
 
-import com.waither.entities.UserData;
+import com.waither.UserData;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.WindAlarmMapping;
-import com.waither.repository.UserRepository;
 import com.waither.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-    private final UserRepository userRepository;
 
     // 7 설문 답변 저장
     @ResponseBody

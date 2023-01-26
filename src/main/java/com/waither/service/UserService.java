@@ -1,11 +1,11 @@
 package com.waither.service;
 
-import com.waither.entities.UserData;
-import com.waither.entities.UserEntity;
+import com.waither.UserData;
+import com.waither.entities.UserDetailEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.WindAlarmMapping;
-import com.waither.repository.UserRepository;
+import com.waither.repository.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +16,16 @@ import static org.hibernate.Hibernate.size;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private UserDetailRepository userDetailRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserDetailRepository userDetailRepository) {
+        this.userDetailRepository = userDetailRepository;
     }
 
     // 7 설문 답변 저장
     public boolean savedSurvey(Long userIdx, String type, Integer value) {
-        UserEntity userData = userRepository.findById(userIdx).get();
+        UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
 
         if (type.equals("veryHot")) {
             userData.setVeryHot(value);
@@ -45,18 +45,18 @@ public class UserService {
 
     // 11 설정 메인화면 조회
     public Optional<MainDataMapping> getMainData(Long userIdx) {
-        Optional<MainDataMapping> mainData = userRepository.findMainData(userIdx);
+        Optional<MainDataMapping> mainData = userDetailRepository.findMainData(userIdx);
 
         return mainData;
     }
 
     // 12 설정 메인화면 변경
     public boolean updateMainData(Long userIdx, char rainFall, char dust, char wind) {
-        Optional<UserEntity> userEntity = userRepository.findById(userIdx);
-        if(userEntity.isPresent()) {
-            userEntity.get().setRainFall(rainFall);
-            userEntity.get().setDust(dust);
-            userEntity.get().setWind(wind);
+        Optional<UserDetailEntity> userDetailEntity = userDetailRepository.findById(userIdx);
+        if(userDetailEntity.isPresent()) {
+            userDetailEntity.get().setRainFall(rainFall);
+            userDetailEntity.get().setDust(dust);
+            userDetailEntity.get().setWind(wind);
             return true;
         }
         else
@@ -70,17 +70,17 @@ public class UserService {
         int sumH = 0;
         int sumVH = 0;
 
-        Optional<UserEntity> user = userRepository.findById(userIdx);
+        Optional<UserDetailEntity> user = userDetailRepository.findById(userIdx);
 
         UserData ud = new UserData();
 
-        int s = size(userRepository.findAll());
-        for (UserEntity userEntity : userRepository.findAll()) {
-            sumVC += userEntity.getVeryCold();
-            sumC += userEntity.getCold();
-            sumG += userEntity.getGood();
-            sumH += userEntity.getHot();
-            sumVH += userEntity.getVeryHot();
+        int s = size(userDetailRepository.findAll());
+        for (UserDetailEntity userDetailEntity : userDetailRepository.findAll()) {
+            sumVC += userDetailEntity.getVeryCold();
+            sumC += userDetailEntity.getCold();
+            sumG += userDetailEntity.getGood();
+            sumH += userDetailEntity.getHot();
+            sumVH += userDetailEntity.getVeryHot();
         }
 
         ud.setVeryCold(user.get().getVeryCold());
@@ -101,7 +101,7 @@ public class UserService {
 
     // 14 사용자 설정 데이터 변경
     public boolean updateUserData(Long userIdx, String type, Integer value) {
-        UserEntity userData = userRepository.findById(userIdx).get();
+        UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         if (type.equals("veryHot")) {
             userData.setVeryHot(value);
         } else if (type.equals("hot")) {
@@ -120,13 +120,13 @@ public class UserService {
 
     // 15 사용자 알람 설정 조회
     public Optional<UserAlarmMapping> getAlarmData(Long userIdx) {
-        Optional<UserAlarmMapping> userAlarmMapping = userRepository.findUserAlarm(userIdx);
+        Optional<UserAlarmMapping> userAlarmMapping = userDetailRepository.findUserAlarm(userIdx);
         return userAlarmMapping;
     }
 
     // 16 알람 설정 변경
     public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm) {
-        UserEntity userData = userRepository.findById(userIdx).get();
+        UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setMon(Mon);
         userData.setTue(Tue);
         userData.setWed(Wed);
@@ -144,13 +144,13 @@ public class UserService {
 
     // 17 사용자 바람 세기 설정 조회
     public Optional<WindAlarmMapping> getWindAlarm(Long userIdx) {
-        Optional<WindAlarmMapping> windAlarmMapping = userRepository.findWindAlarm(userIdx);
+        Optional<WindAlarmMapping> windAlarmMapping = userDetailRepository.findWindAlarm(userIdx);
         return windAlarmMapping;
     }
 
     // 18 사용자 바람 세기 설정 변경
     public boolean updateWindAlarm(Long userIdx, Character windAlarm, Integer windValue) {
-        UserEntity userData = userRepository.findById(userIdx).get();
+        UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setWindAlarm(windAlarm);
         userData.setWindValue(windValue);
         return true;

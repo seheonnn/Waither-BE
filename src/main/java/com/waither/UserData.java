@@ -1,4 +1,4 @@
-package com.waither.entities;
+package com.waither;
 
 import lombok.Getter;
 import lombok.Setter;
