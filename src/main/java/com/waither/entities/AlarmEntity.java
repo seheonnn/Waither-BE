@@ -3,13 +3,14 @@ package com.waither.entities;
 import com.waither.dto.AlarmDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.sql.Timestamp;
 
 @Table(name = "Alarm")
 @Entity(name = "Alarm")
 @Getter
-//@Setter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,6 +25,7 @@ public class AlarmEntity {
     private Long userIdx;
 
     @Column(name = "contents", nullable = false)
+    @ColumnDefault("")
     private String contents;
 
     @Column(name = "createdAt", nullable = false)

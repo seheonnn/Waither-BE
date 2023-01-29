@@ -20,7 +20,18 @@ public class AlarmController {
     @Autowired
     AlarmService alarmService;
 
-    // 8 알람
+    // 8 알람 생성
+    @ResponseBody
+    @GetMapping("main")
+    public ResponseEntity<String> createAlarm (@RequestParam("userIdx") Long userIdx                           ) {
+        String newAlarm = alarmService.createAlarm(userIdx,         );
+
+        if (newAlarm.isEmpty())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        else
+            return ResponseEntity.ok(newAlarm);
+    }
 
     // 9 전체 알람 조회
     @ResponseBody

@@ -1,8 +1,10 @@
 package com.waither.service;
 
 import com.waither.entities.AlarmEntity;
+import com.waither.entities.UserDetailEntity;
+import com.waither.entities.UserEntity;
 import com.waither.repository.AlarmRepository;
-import com.waither.repository.UserRepository;
+import com.waither.repository.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,26 @@ import java.util.Optional;
 public class AlarmService {
 
     private AlarmRepository alarmRepository;
+    private UserDetailRepository userDetailRepository;
 
     @Autowired
     public AlarmService(AlarmRepository alarmRepository) { this.alarmRepository = alarmRepository; }
+
+    //8 알람 생성
+    public String createAlarm(Long userIdx,                 ) {
+        AlarmEntity newAlarm = new AlarmEntity();
+        UserDetailEntity user = userDetailRepository.findById(userIdx).get();
+
+        if ()
+            newAlarm.setContents();
+
+
+
+
+        this.alarmRepository.saveAndFlush(newAlarm);
+        return newAlarm.getContents();
+    }
+
 
 
     // 9 전체 알람 조회
