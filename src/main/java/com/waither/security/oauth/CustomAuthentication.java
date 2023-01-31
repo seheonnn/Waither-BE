@@ -57,7 +57,7 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return String.valueOf(id);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
