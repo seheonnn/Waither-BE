@@ -1,5 +1,6 @@
 package com.waither.security.oauth.service;
 
+import com.waither.entities.UserEntity;
 import com.waither.security.oauth.CustomAuthentication;
 import com.waither.security.oauth.OAuthProcessingException;
 import com.waither.security.oauth.ProviderType;
@@ -50,13 +51,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oAuth2User.getAttributes());
         log.info("OAuth2 Login - process : " + userInfo.getEmail());
 
-        User user = userRepository.findUserByAuthId(userInfo.getId());
+        UserEntity user = userRepository.findUserByAuthId(userInfo.getId());
 
         if (user != null) { // 이미 가입한 경우
             log.info("OAuth2 - process : " + providerType.toString());
-            if (!providerType.toString().equals(user.getAuthProvider())) {
+            if (!providerType.toString().equals(user.getProvider())) {
                 throw new OAuthProcessingException(
-                        "Please use your " + user.getAuthProvider() + " account to login."
+                        "Please use your " + user.getProvider() + " account to login."
                 );
             }
 //            updateUser(user, userInfo);
@@ -67,14 +68,14 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
     }
 
     //유저 생성 - 회원가입
-    private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
+    private UserEntity createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
         log.info("OAuth2 Login - createUser : " + userInfo.getId());
-        User user = User.builder()
+        UserEntity user = UserEntity.builder()
                 .authId(userInfo.getId())
                 .email(userInfo.getEmail())
                 .role(String.valueOf(RoleType.USER)) //RoleType 클래스 추가함
-                .active(1)
-                .authProvider(String.valueOf(providerType))
+                .status(1)
+                .provider(String.valueOf(providerType))
                 .build();
         return userRepository.save(user);
     }

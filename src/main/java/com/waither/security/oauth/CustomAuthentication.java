@@ -1,5 +1,6 @@
 package com.waither.security.oauth;
 
+import com.waither.entities.UserEntity;
 import com.waither.security.test.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +33,7 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
     }
 
 
-    public static CustomAuthentication create(User user) {
+    public static CustomAuthentication create(UserEntity user) {
         List<GrantedAuthority> authorityList = Collections.singletonList(new SimpleGrantedAuthority(
                 "" + RoleType.USER));
         return new CustomAuthentication(
@@ -42,7 +43,7 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
         );
     }
 
-    public static CustomAuthentication create(User user, Map<String, Object> attributes) {
+    public static CustomAuthentication create(UserEntity user, Map<String, Object> attributes) {
         log.info("CustomAuthentication create : " + attributes.toString());
         CustomAuthentication customAuthentication = CustomAuthentication.create(user);
         customAuthentication.setAttributes(attributes);
