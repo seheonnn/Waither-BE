@@ -28,9 +28,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-
-	//open-Api
+  implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	/*//json 파싱
 	implementation 'org.json:json:20220924'*/
@@ -39,9 +37,9 @@ dependencies {
 	//일 최고,최저기온 크롤링-> jsoup HTML parser
 	implementation 'org.jsoup:jsoup:1.14.2'
 
-	//userData
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
