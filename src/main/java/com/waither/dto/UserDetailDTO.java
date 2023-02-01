@@ -51,8 +51,6 @@ public class UserDetailDTO {
 
     private char wind;
 
-    private char status;
-
     private Timestamp updatedAt;
 
     private Timestamp createdAt;
@@ -101,7 +99,6 @@ public class UserDetailDTO {
                 .rainFall(rainFall)
                 .dust(dust)
                 .wind(wind)
-                .status(status)
                 .updatedAt(updatedAt)
                 .createdAt(createdAt)
                 .veryCold(veryCold)

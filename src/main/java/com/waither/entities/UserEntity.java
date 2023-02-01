@@ -3,6 +3,7 @@ package com.waither.entities;
 import com.waither.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "User")
 @Table(name = "User")
@@ -39,6 +40,10 @@ public class UserEntity {
     @Column(name = "role", nullable = false) // User, Guest
     private String role;
 
+    @Column(name = "status", nullable = false)
+    @ColumnDefault("'A'")
+    private char status;
+
     public UserDTO toDTO() {
         return UserDTO.builder()
                 .userName(userName)
@@ -48,6 +53,8 @@ public class UserEntity {
                 .refreshToken(refreshToken)
                 .provider(provider)
                 .role(provider)
+                .role(role)
+                .status(status)
                 .build();
     }
 }

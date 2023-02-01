@@ -21,17 +21,20 @@ public class AlarmController {
     AlarmService alarmService;
 
     // 8 알람 생성
-    @ResponseBody
-    @GetMapping("main")
-    public ResponseEntity<String> createAlarm (@RequestParam("userIdx") Long userIdx                           ) {
-        String newAlarm = alarmService.createAlarm(userIdx,         );
+//    @ResponseBody
+//    @GetMapping("main")
+//    public ResponseEntity<String> createAlarm (@RequestParam("userIdx") Long userIdx                           ) {
 
-        if (newAlarm.isEmpty())
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        String tempAlarm = alarmService.createTempAlarm(userIdx,         );
+//        String outAlarm = alarmService.createOutAlarm(userIdx,         );
+//        String climateAlarm = alarmService.createClimateAlarm(userIdx, );
+//        String customAlarm = alarmService.createCustomAlarm(userIdx, );
+//        String rainAlarm = alarmService.createRainAlarm(userIdx, );
+//        String snowAlarm = alarmService.createSnowAlarm(userIdx, );
+//        String windAlarm = alarmService.createWindAlarm(userIdx, windValue);
 
-        else
-            return ResponseEntity.ok(newAlarm);
-    }
+        //
+//    }
 
     // 9 전체 알람 조회
     @ResponseBody

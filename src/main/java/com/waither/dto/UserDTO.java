@@ -26,6 +26,8 @@ public class UserDTO {
 
     private String role;
 
+    private char status;
+
     public UserEntity toEntity() {
         return UserEntity.builder()
                 .userName(userName)
@@ -35,6 +37,7 @@ public class UserDTO {
                 .refreshToken(refreshToken)
                 .provider(provider)
                 .role(role)
+                .status(status)
                 .build();
     }
 

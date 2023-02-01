@@ -85,9 +85,9 @@ public class UserDetailEntity {
     @ColumnDefault("'Y'")
     private char wind;
 
-    @Column(name = "status", nullable = false)
-    @ColumnDefault("'A'")
-    private char status;
+//    @Column(name = "status", nullable = false)
+//    @ColumnDefault("'A'")
+//    private char status;
 
     @Column(name = "updatedAt")
     private Timestamp updatedAt;
@@ -158,7 +158,6 @@ public class UserDetailEntity {
                 .rainFall(rainFall)
                 .dust(dust)
                 .wind(wind)
-                .status(status)
                 .updatedAt(updatedAt)
                 .createdAt(createdAt)
                 .veryCold(veryCold)
