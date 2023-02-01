@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok'
@@ -27,9 +28,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	//내장톰캣 오류
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	/*//json 파싱
 	implementation 'org.json:json:20220924'*/
 	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
