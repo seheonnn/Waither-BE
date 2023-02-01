@@ -1,10 +1,11 @@
 package com.waither.entities;
 
 import com.waither.dto.UserDetailDTO;
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 

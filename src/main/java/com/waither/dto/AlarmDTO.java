@@ -1,7 +1,7 @@
 package com.waither.dto;
 
 import com.waither.entities.AlarmEntity;
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;

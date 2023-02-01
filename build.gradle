@@ -1,12 +1,12 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.0.1'
+	id 'org.springframework.boot' version '2.7.7'
 	id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = "17"
 
 configurations {
 	compileOnly {
@@ -21,13 +21,15 @@ repositories {
 dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+//<<<<<<< HEAD
   implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	/*//json 파싱
@@ -36,10 +38,40 @@ dependencies {
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	//일 최고,최저기온 크롤링-> jsoup HTML parser
 	implementation 'org.jsoup:jsoup:1.14.2'
+//=======
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	//security
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	//jwt-manager
+//	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+//	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+//	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	//http
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
+
+	//servlet
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+	//mail
+//	implementation 'org.springframework.boot:spring-boot-starter-mail'
+//>>>>>>> 995927066e5286e98feac4ae7e25e6b01c5eba43
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
+//<<<<<<< HEAD
+//
+//=======
+//targetCompatibility = JavaVersion.VERSION_14
+//>>>>>>> 995927066e5286e98feac4ae7e25e6b01c5eba43

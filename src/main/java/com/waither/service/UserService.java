@@ -2,16 +2,20 @@ package com.waither.service;
 
 import com.waither.UserData;
 import com.waither.entities.UserDetailEntity;
+import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.WindAlarmMapping;
 import com.waither.repository.UserDetailRepository;
+import com.waither.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static org.hibernate.Hibernate.size;
+import static org.thymeleaf.util.ListUtils.size;
+
+//import static org.hibernate.Hibernate.size;
 
 @Service
 public class UserService {
@@ -19,8 +23,10 @@ public class UserService {
     private UserDetailRepository userDetailRepository;
 
     @Autowired
-    public UserService(UserDetailRepository userDetailRepository) {
+    public UserService(UserDetailRepository userDetailRepository,
+                       UserRepository userRepository) {
         this.userDetailRepository = userDetailRepository;
+        this.userRepository = userRepository;
     }
 
     // 7 설문 답변 저장
@@ -154,6 +160,21 @@ public class UserService {
         userData.setWindAlarm(windAlarm);
         userData.setWindValue(windValue);
         return true;
+    }
+
+
+    UserEntity[] users;
+    private final UserRepository userRepository;
+
+    public UserEntity findUserByAuthId(String id) {
+        UserEntity user = userRepository.findUserByAuthId(id);
+        return user;
+    }
+
+    public UserEntity save(UserEntity user){
+        users[0] = user;
+//        log.info(user + "가 저장되었습니다.");
+        return user;
     }
 
 }
