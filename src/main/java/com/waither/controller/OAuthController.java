@@ -15,13 +15,14 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class LoginTestController {
+public class OAuthController {
 
     //로그인 처리 후에 사용자의 정보를 OAuth에서 얻어 반환
     @GetMapping("/login/{provider}")
     public void oauthLogin(@PathVariable String provider, HttpServletResponse response)throws IOException {
         log.info("OAuth2 Login");
-        String redirect_uri = "http://localhost:8080/oauth2/authorization/" + provider;
+        String redirect_uri = "http://localhost:8080/oauth2/authorization/" + provider; // <- 이거 주석하고
+//        String redirect_uri = "https://waither.shop/oauth2/authorization/" + provider; // <- 이거 주석 풀기
         response.sendRedirect(redirect_uri);
 
     }
@@ -32,11 +33,5 @@ public class LoginTestController {
         log.info("OAuth2 Login Token Response");
         return ResponseEntity.ok(new JsonResponse(200,"login-getToken", accessToken));
     }
-
-//    @GetMapping("/login")
-//    public ResponseEntity<?> loginError(@PathParam("error")String error){
-//        log.error("OAuth2 Login error");
-//        throw new MethodNotAllowedException("login failure", );
-//    }
 
 }

@@ -71,8 +71,10 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
     private UserEntity createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
         log.info("OAuth2 Login - createUser : " + userInfo.getId());
         UserEntity user = UserEntity.builder()
+                .userName(userInfo.getName())
                 .authId(userInfo.getId())
-//                .email(userInfo.getEmail())
+                .email(userInfo.getEmail())
+                .pw("")
                 .role(String.valueOf(RoleType.USER)) //RoleType 클래스 추가함
                 .status('A')
                 .provider(String.valueOf(providerType))

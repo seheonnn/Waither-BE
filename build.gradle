@@ -29,7 +29,6 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-//<<<<<<< HEAD
   implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	/*//json 파싱
@@ -38,7 +37,6 @@ dependencies {
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	//일 최고,최저기온 크롤링-> jsoup HTML parser
 	implementation 'org.jsoup:jsoup:1.14.2'
-//=======
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -63,15 +61,9 @@ dependencies {
 
 	//mail
 //	implementation 'org.springframework.boot:spring-boot-starter-mail'
-//>>>>>>> 995927066e5286e98feac4ae7e25e6b01c5eba43
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-//<<<<<<< HEAD
-//
-//=======
-//targetCompatibility = JavaVersion.VERSION_14
-//>>>>>>> 995927066e5286e98feac4ae7e25e6b01c5eba43
+}\
