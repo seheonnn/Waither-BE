@@ -1,6 +1,7 @@
 package com.waither.service;
 
 import com.waither.UserData;
+import com.waither.config.BaseException;
 import com.waither.entities.UserDetailEntity;
 import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
@@ -34,7 +35,9 @@ public class UserService {
 
     // 7 설문 답변 저장
     @Transactional
-    public boolean savedSurvey(Long userIdx, String type, Integer value) {
+    public boolean savedSurvey(Long userIdx, String type, Integer value) throws BaseException {
+        log.info("type");
+        log.info("value");
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
 
         if (type.equals("veryHot")) {
@@ -54,7 +57,7 @@ public class UserService {
     }
 
     // 11 설정 메인화면 조회
-    public Optional<MainDataMapping> getMainData(Long userIdx) {
+    public Optional<MainDataMapping> getMainData(Long userIdx) throws BaseException {
         Optional<MainDataMapping> mainData = userDetailRepository.findMainData(userIdx);
 
         return mainData;
@@ -62,7 +65,7 @@ public class UserService {
 
     // 12 설정 메인화면 변경
     @Transactional
-    public boolean updateMainData(Long userIdx, char rainFall, char dust, char wind) {
+    public boolean updateMainData(Long userIdx, char rainFall, char dust, char wind) throws BaseException {
         Optional<UserDetailEntity> userDetailEntity = userDetailRepository.findById(userIdx);
         if(userDetailEntity.isPresent()) {
             userDetailEntity.get().setRainFall(rainFall);
@@ -74,7 +77,7 @@ public class UserService {
             return false;
     }
     // 13 사용자 설정 데이터 조회
-    public UserData getUserData(Long userIdx) {
+    public UserData getUserData(Long userIdx) throws BaseException{
         int sumVC = 0;
         int sumC = 0;
         int sumG = 0;
@@ -112,7 +115,7 @@ public class UserService {
 
     // 14 사용자 설정 데이터 변경
     @Transactional
-    public boolean updateUserData(Long userIdx, String type, Integer value) {
+    public boolean updateUserData(Long userIdx, String type, Integer value) throws BaseException{
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         if (type.equals("veryHot")) {
             userData.setVeryHot(value);
@@ -131,14 +134,14 @@ public class UserService {
     }
 
     // 15 사용자 알람 설정 조회
-    public Optional<UserAlarmMapping> getAlarmData(Long userIdx) {
+    public Optional<UserAlarmMapping> getAlarmData(Long userIdx) throws BaseException {
         Optional<UserAlarmMapping> userAlarmMapping = userDetailRepository.findUserAlarm(userIdx);
         return userAlarmMapping;
     }
 
     // 16 알람 설정 변경
     @Transactional
-    public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm) {
+    public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm)  throws  BaseException{
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setMon(Mon);
         userData.setTue(Tue);
@@ -156,14 +159,14 @@ public class UserService {
     }
 
     // 17 사용자 바람 세기 설정 조회
-    public Optional<WindAlarmMapping> getWindAlarm(Long userIdx) {
+    public Optional<WindAlarmMapping> getWindAlarm(Long userIdx)  throws BaseException{
         Optional<WindAlarmMapping> windAlarmMapping = userDetailRepository.findWindAlarm(userIdx);
         return windAlarmMapping;
     }
 
     // 18 사용자 바람 세기 설정 변경
     @Transactional
-    public boolean updateWindAlarm(Long userIdx, Character windAlarm, Integer windValue) {
+    public boolean updateWindAlarm(Long userIdx, Character windAlarm, Integer windValue) throws BaseException{
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setWindAlarm(windAlarm);
         userData.setWindValue(windValue);

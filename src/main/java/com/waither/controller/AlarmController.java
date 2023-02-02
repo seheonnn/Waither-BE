@@ -1,5 +1,7 @@
 package com.waither.controller;
 
+import com.waither.config.BaseException;
+import com.waither.config.BaseResponse;
 import com.waither.entities.AlarmEntity;
 import com.waither.service.AlarmService;
 import io.swagger.annotations.ApiOperation;
@@ -41,28 +43,26 @@ public class AlarmController {
     @ApiOperation(value = "#9 전체 알람 조회 api", notes = "Param에 userIdx담아서 요청 ex) @Param userIdx = 1")
     @ResponseBody
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> myAlarmList(@RequestParam("userIdx") Long userIdx) {
-
-        List<AlarmEntity> list = alarmService.myAlarmList(userIdx);
-        Map<String, Object> map = new HashMap<>();
-        map.put("alarmlist", list);
-        if (map.isEmpty())
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        else
-            return ResponseEntity.ok(map);
+    public BaseResponse<List<AlarmEntity>> myAlarmList(@RequestParam("userIdx") Long userIdx) {
+        try{
+            List<AlarmEntity> list = alarmService.myAlarmList(userIdx);
+            return new BaseResponse<>(list);
+        } catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
 
 
     // 10 알람 삭제
-    @ApiOperation(value = "#10 알람 삭제 api", notes = "Param에 userIdx, Body에 String:String으로 alarmIdx를 담아서 요청 ex) @Param userIdx = 1 @Body {\"alarmIdx\": \"1\"}")
+    @ApiOperation(value = "#10 알람 삭제 api", notes = "Param에 userIdx, Body에 String:String으로 alarmIdx를 담아서 요청 ex) @Param userIdx = 1 @Body {\"alarmIdx\":\"1\"}")
     @ResponseBody
     @PostMapping("")
-    public ResponseEntity<Void> deleteAlarm(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) {
-        if (alarmService.delete(Long.valueOf(request.get("alarmIdx")))  ) {
-            return ResponseEntity.ok(null);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    public BaseResponse<Void> deleteAlarm(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) throws Exception{
+        try{
+            alarmService.delete(Long.valueOf(request.get("alarmIdx")));
+            return new BaseResponse<>(null);
+        } catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 }
