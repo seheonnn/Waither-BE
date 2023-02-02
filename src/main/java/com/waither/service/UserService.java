@@ -8,8 +8,10 @@ import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.WindAlarmMapping;
 import com.waither.repository.UserDetailRepository;
 import com.waither.repository.UserRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -17,6 +19,7 @@ import static org.thymeleaf.util.ListUtils.size;
 
 //import static org.hibernate.Hibernate.size;
 
+@Log4j2
 @Service
 public class UserService {
 
@@ -30,6 +33,7 @@ public class UserService {
     }
 
     // 7 설문 답변 저장
+    @Transactional
     public boolean savedSurvey(Long userIdx, String type, Integer value) {
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
 
@@ -57,6 +61,7 @@ public class UserService {
     }
 
     // 12 설정 메인화면 변경
+    @Transactional
     public boolean updateMainData(Long userIdx, char rainFall, char dust, char wind) {
         Optional<UserDetailEntity> userDetailEntity = userDetailRepository.findById(userIdx);
         if(userDetailEntity.isPresent()) {
@@ -106,6 +111,7 @@ public class UserService {
     }
 
     // 14 사용자 설정 데이터 변경
+    @Transactional
     public boolean updateUserData(Long userIdx, String type, Integer value) {
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         if (type.equals("veryHot")) {
@@ -131,6 +137,7 @@ public class UserService {
     }
 
     // 16 알람 설정 변경
+    @Transactional
     public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm) {
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setMon(Mon);
@@ -155,6 +162,7 @@ public class UserService {
     }
 
     // 18 사용자 바람 세기 설정 변경
+    @Transactional
     public boolean updateWindAlarm(Long userIdx, Character windAlarm, Integer windValue) {
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setWindAlarm(windAlarm);

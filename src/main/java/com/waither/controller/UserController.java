@@ -8,6 +8,7 @@ import com.waither.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.hamcrest.beans.HasProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Optional;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/users")
@@ -51,12 +51,14 @@ public class UserController {
     }
 
     // 12 설정 메인화면 변경
-    @ApiOperation(value = "#12 설정 메인화면 변경 api", notes = "Param에 userIdx, Body에 String: String으로 담아서 요청 ex) {\"rainFall\": \"Y \" , \"dust\": \" N\", \"wind\": \"Y \" } ")
+    @ApiOperation(value = "#12 설정 메인화면 변경 api", notes = "Param에 userIdx, Body에 String: String으로 담아서 요청 ex) {\"rainFall\":\"Y\" ,\"dust\":\"N\",\"wind\":\"Y\"} ")
     @ResponseBody
     @PostMapping("/settings")
     public ResponseEntity<Void> updateMainData(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) {
-        if(userService.updateMainData(userIdx,request.get("rainFall").charAt(0), request.get("dust").charAt(0), request.get("wind").charAt(0)))
+        if(userService.updateMainData(userIdx,request.get("rainFall").charAt(0), request.get("dust").charAt(0), request.get("wind").charAt(0))) {
+            log.info(ResponseEntity.ok(null));
             return ResponseEntity.ok(null);
+        }
         else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -101,7 +103,7 @@ public class UserController {
 
     //16 알람 설정 변경
     @ApiOperation(value = "#16 알람 설정 변경 api", notes = "Param에 userIdx, Body에 String:String으로 Mon, Tue, Wed, Thu, Fri, Sat, Sun, outAlarm, climateAlarm, customAlarm, rainAlarm, snowAlarm을 담아서 요청" +
-            "\nex){\"Mon\": \"Y \" , \"Tue\": \" Y\", \"Wed\": \"Y \", \"Thu\": \"Y \", \"Fri\": \"Y \", \"Sat\": \"N \", \"Sun\": \"N \", \"outAlarm\": \"Y \", \"climateAlarm\": \"Y \", \"customAlarm\": \"Y \", \"rainAlarm\": \"Y \", \"customAlarm\": \"Y \", \"snowAlarm\": \"Y \" } " +
+            "\nex){\"Mon\": \"Y\" , \"Tue\": \"Y\", \"Wed\": \"Y\", \"Thu\": \"Y\", \"Fri\": \"Y\", \"Sat\": \"N\", \"Sun\": \"N\", \"outAlarm\": \"Y\", \"climateAlarm\": \"Y\", \"customAlarm\": \"Y\", \"rainAlarm\": \"Y\", \"customAlarm\": \"Y\", \"snowAlarm\": \"Y\" } " +
             "\n 각 요일 : on/off, outAlarm : 외출 알람 설정 on/off, climateAlarm : 기상 예보 알람 on/off, customAlarm : 사용자 맞춤 알람 on/off, rainAlarm : 소나기 알람 받기 on/off, snowAlarm : 강설 정보 받기 on/off")
     @ResponseBody
     @PostMapping("/settings/alarm")

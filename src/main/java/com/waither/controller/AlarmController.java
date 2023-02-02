@@ -54,11 +54,11 @@ public class AlarmController {
 
 
     // 10 알람 삭제
-    @ApiOperation(value = "#10 알람 삭제 api", notes = "Param에 userIdx, Body에 String:String으로 alarmIdx를 담아서 요청 ex) @Param userIdx = 1 @Body {\"alarmIdx\": \"1 \"}")
+    @ApiOperation(value = "#10 알람 삭제 api", notes = "Param에 userIdx, Body에 String:String으로 alarmIdx를 담아서 요청 ex) @Param userIdx = 1 @Body {\"alarmIdx\": \"1\"}")
     @ResponseBody
     @PostMapping("")
-    public ResponseEntity<Void> deleteAlarm(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, Long> request) {
-        if (alarmService.delete( (request.get("AlarmIdx")) )  ) {
+    public ResponseEntity<Void> deleteAlarm(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) {
+        if (alarmService.delete(Long.valueOf(request.get("alarmIdx")))  ) {
             return ResponseEntity.ok(null);
         }
         else {

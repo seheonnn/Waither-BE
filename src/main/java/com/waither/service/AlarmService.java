@@ -6,6 +6,7 @@ import com.waither.entities.UserEntity;
 import com.waither.repository.AlarmRepository;
 import com.waither.repository.UserDetailRepository;
 import com.waither.repository.UserRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -218,7 +219,7 @@ public class AlarmService {
 
     // 10 알람 삭제
     public boolean delete(Long alarmIdx) {
-        Optional<AlarmEntity> idx = this.alarmRepository.findByAlarmIdx(alarmIdx);
+        Optional<AlarmEntity> idx = this.alarmRepository.findById(alarmIdx);
         if(idx.isPresent()) {
             alarmRepository.delete(idx.get());
             return true;
