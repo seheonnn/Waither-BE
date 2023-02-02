@@ -71,6 +71,9 @@ public class UserDetailEntity {
     @ColumnDefault("'Y'")
     private char windAlarm;
 
+    @Column(name = "windValue")
+    private int windValue;
+
     @Column(name = "rainFall", nullable = false)
     @ColumnDefault("'Y'")
     private char rainFall;
@@ -152,6 +155,7 @@ public class UserDetailEntity {
                 .rainAlarm(rainAlarm)
                 .snowAlarm(snowAlarm)
                 .windAlarm(windAlarm)
+                .windValue(windValue)
                 .rainFall(rainFall)
                 .dust(dust)
                 .wind(wind)
