@@ -1,12 +1,19 @@
+server:
+  port: 443
+  ssl:
+    enable: true
+    enabled-protocols:
+      - TLSv1.1
+      - TLSv1.2
+    key-store: "/etc/pki/tls/certs/waither/waither.p12"
+    key-store-password: "waither0330"
+    key-store-type: "PKCS12"
+
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://waither-db.cg9dqzfapqgp.ap-northeast-2.rds.amazonaws.com:3306/waither
-
-#server:
-#  port: 80
-
     username: waither
     password: waither0330
 
@@ -30,8 +37,8 @@ spring:
           kakao:
             client-id: d123b0e487f515ba55f26453d6537fbc
             client-secret: yc8CcG3LgvElOJgGY32sXqMyqcR9JNGO
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
-#            redirect-uri: https://waither.shop/login/oauth2/code/kakao <- 위에 거 주석하고 이거 주석 풀기
+#            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            redirect-uri: https://waither.shop/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             client-name: Kakao
