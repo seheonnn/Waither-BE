@@ -1,12 +1,14 @@
 package com.waither.service;
 
-import com.waither.UserData;
+import com.waither.config.BaseResponseStatus;
+import com.waither.model.UserData;
 import com.waither.config.BaseException;
 import com.waither.entities.UserDetailEntity;
 import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.WindAlarmMapping;
+import com.waither.model.UserInfo;
 import com.waither.repository.UserDetailRepository;
 import com.waither.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
@@ -170,6 +172,48 @@ public class UserService {
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setWindAlarm(windAlarm);
         userData.setWindValue(windValue);
+        return true;
+    }
+
+    //19 회원정보 조회
+    public UserInfo getUserInfo(Long userIdx) throws BaseException{
+        UserInfo userInfo = new UserInfo();
+        Optional<UserEntity> user = userRepository.findById(userIdx);
+        userInfo.setName(user.get().getUserName());
+        userInfo.setEmail(user.get().getEmail());
+        return userInfo;
+    }
+
+
+    //20 회원이름 변경
+    @Transactional
+    public boolean updateUserName(Long userIdx, String name) throws BaseException{
+        try{
+            Optional<UserEntity> user = userRepository.findById(userIdx);
+            if(user.isPresent()){
+                log.info(user.get().getUserName());
+                user.get().changeName(name);
+                log.info(user.get().getUserName());
+                log.info(name);
+                return true;
+            }
+        }catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.REQUEST_ERROR);
+        }
+        return false;
+    }
+
+    //21 비밀번호 일치 확인
+    public boolean pwValidation(Long userIdx, String pw) throws BaseException{
+        Optional<UserEntity> user = userRepository.findById(userIdx);
+        return user.filter(userEntity -> pw.equals(userEntity.getPw())).isPresent();
+    }
+
+    //22 비밀번호 재설정
+    @Transactional
+    public boolean updatePw(Long userIdx, String pw) throws BaseException{
+        Optional<UserEntity> user = userRepository.findById(userIdx);
+        user.ifPresent(userEntity -> userEntity.changePw(pw));
         return true;
     }
 

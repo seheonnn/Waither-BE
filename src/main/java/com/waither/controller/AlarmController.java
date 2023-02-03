@@ -60,7 +60,7 @@ public class AlarmController {
     public BaseResponse<Void> deleteAlarm(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) throws Exception{
         try{
             alarmService.delete(Long.valueOf(request.get("alarmIdx")));
-            return new BaseResponse<>(null);
+            return new BaseResponse<>();
         } catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

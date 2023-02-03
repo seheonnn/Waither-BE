@@ -37,7 +37,6 @@ public class OpenController {
     @GetMapping("/")
     public BaseResponse<GetWeatherRes> getWeather(@RequestParam("x") String x, @RequestParam("y") String y) throws Exception{
         try {
-            //log.info("startttt");
             //위경도값 좌표로 변환
             gpt.setLat(Double.parseDouble(x));
             gpt.setLon(Double.parseDouble(y));
@@ -48,7 +47,6 @@ public class OpenController {
             GetWeatherRes getWeatherRes = openProvider.getMainWea(nx,ny);
             return new BaseResponse<>(getWeatherRes);
         } catch (BaseException exception) {
-            //log.info("star");
             return new BaseResponse<>((exception.getStatus()));
         }
     }

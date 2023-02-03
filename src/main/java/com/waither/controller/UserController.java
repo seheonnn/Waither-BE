@@ -1,25 +1,19 @@
 package com.waither.controller;
 
-import com.waither.UserData;
+import com.waither.config.BaseResponseStatus;
+import com.waither.model.UserData;
 import com.waither.config.BaseException;
 import com.waither.config.BaseResponse;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.WindAlarmMapping;
+import com.waither.model.UserInfo;
 import com.waither.service.UserService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.hamcrest.beans.HasProperty;
-import org.jsoup.Connection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Executable;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Optional;
 @RestController
@@ -37,7 +31,7 @@ public class UserController {
     public BaseResponse<Void> savedSurvey(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) throws Exception {
         try {
             userService.savedSurvey(userIdx, request.get("type"), Integer.valueOf(request.get("value")));
-            return new BaseResponse<>(null);
+            return new BaseResponse<>();
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -64,7 +58,7 @@ public class UserController {
     public BaseResponse<Void> updateMainData(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) {
         try {
             userService.updateMainData(userIdx, request.get("rainFall").charAt(0), request.get("dust").charAt(0), request.get("wind").charAt(0));
-            return new BaseResponse<>(null);
+            return new BaseResponse<>();
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -90,7 +84,7 @@ public class UserController {
     public BaseResponse<Void> updateUserData(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) {
         try {
             userService.updateUserData(userIdx, request.get("type"), Integer.valueOf(request.get("value")));
-            return new BaseResponse<>(null);
+            return new BaseResponse<>();
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -122,7 +116,7 @@ public class UserController {
                     request.get("Mon").charAt(0), request.get("Tue").charAt(0), request.get("Wed").charAt(0), request.get("Thu").charAt(0), request.get("Fri").charAt(0), request.get("Sat").charAt(0), request.get("Sun").charAt(0),
                     request.get("outAlarm").charAt(0), request.get("climateAlarm").charAt(0), request.get("customAlarm").charAt(0),
                     request.get("rainAlarm").charAt(0), request.get("snowAlarm").charAt(0));
-            return new BaseResponse<>(null);
+            return new BaseResponse<>();
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -149,9 +143,61 @@ public class UserController {
     public BaseResponse<Void> updateWindAlarm(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) {
         try {
             userService.updateWindAlarm(userIdx, request.get("windAlarm").charAt(0), Integer.valueOf(request.get("windValue")));
-            return new BaseResponse<>(null);
+            return new BaseResponse<>();
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    //#19 회원정보 조회
+    @ApiOperation(value = "#19 회원 정보 조회 api", notes = "Param에 userIdx 담아서 요청 ex) userIdx = 1")
+    @ResponseBody
+    @GetMapping("/settings/user")
+    public BaseResponse<UserInfo> getUserInfo(@RequestParam("userIdx") Long userIdx) throws Exception {
+        try {
+            UserInfo userInfo = userService.getUserInfo(userIdx);
+            return new BaseResponse<>(userInfo);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    //#20 회원이름 변경
+    @ApiOperation(value = "#20 회원 이름 변경 api", notes = "Param에 userIdx, Body에 String:String으로 name:변경할 이름 담아서 요청 ex) {\"name\" : \"동동키\"} ")
+    @ResponseBody
+    @PostMapping("/settings/user")
+    public BaseResponse<UserInfo> updateUserName(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) throws Exception {
+        try {
+            userService.updateUserName(userIdx, request.get("name"));
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+    //#21 비밀번호 재설정 - 일치 확인
+    @ApiOperation(value = "#21 비밀번호 일치 확인 api", notes = "Param에 userIdx, Body에 String:String으로 password 담아서 요청 ex) {\"password\" : \"abc123\"} \n 테스트 시 raw데이터 보내기.")
+    @ResponseBody
+    @PostMapping("/settings/user/password")
+    public BaseResponse<String> pwValidation(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) throws Exception {
+            if(userService.pwValidation(userIdx,request.get("password"))){
+                return new BaseResponse<>("일치 확인");
+            }else return new BaseResponse<>(BaseResponseStatus.INVALID);
+    }
+
+    //#22 비밀번호 재설정
+    @ApiOperation(value = "#22 비밀번호 재설정 api", notes = "Param에 userIdx, Body에 String:String으로 password 담아서 요청 ex) {\"password\" : \"abc1234\"} \n 테스트 시 raw데이터 보내기.")
+    @ResponseBody
+    @PostMapping("/settings/user/password/change")
+    public BaseResponse<Void> updatePw(@RequestParam("userIdx") Long userIdx, @RequestBody HashMap<String, String> request) throws Exception {
+        try {
+            userService.updatePw(userIdx,request.get("password"));
+            return new BaseResponse<>();
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
 }
