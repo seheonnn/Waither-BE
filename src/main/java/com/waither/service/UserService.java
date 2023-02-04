@@ -26,7 +26,7 @@ import static org.thymeleaf.util.ListUtils.size;
 @Service
 public class UserService {
 
-    private UserDetailRepository userDetailRepository;
+    private final UserDetailRepository userDetailRepository;
 
     @Autowired
     public UserService(UserDetailRepository userDetailRepository,
@@ -217,6 +217,16 @@ public class UserService {
         return true;
     }
 
+    public boolean emailValidation(String email) throws BaseException{
+        Optional<UserEntity> user = userRepository.findUserByEmail(email);
+        if(user.get().getEmail().equals(email)){
+            return true;
+        } else return false;
+    }
+
+    public Long findUserByEmail(String email) throws Exception{
+        return userRepository.findUserByEmail(email).get().getUserIdx();
+    }
 
     UserEntity[] users;
     private final UserRepository userRepository;

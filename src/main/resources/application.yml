@@ -1,13 +1,13 @@
-server:
-  port: 443
-  ssl:
-    enable: true
-    enabled-protocols:
-      - TLSv1.1
-      - TLSv1.2
-    key-store: "/etc/pki/tls/certs/waither/waither.p12"
-    key-store-password: "waither0330"
-    key-store-type: "PKCS12"
+#server:
+#  port: 443
+#  ssl:
+#    enable: true
+#    enabled-protocols:
+#      - TLSv1.1
+#      - TLSv1.2
+#    key-store: "/etc/pki/tls/certs/waither/waither.p12"
+#    key-store-password: "waither0330"
+#    key-store-type: "PKCS12"
 
 
 spring:
@@ -16,11 +16,9 @@ spring:
     url: jdbc:mysql://waither-db.cg9dqzfapqgp.ap-northeast-2.rds.amazonaws.com:3306/waither
     username: waither
     password: waither0330
-
   jackson:
     serialization:
       fail-on-empty-beans: false
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -28,8 +26,6 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
-
   security:
     oauth2:
       client:
@@ -52,21 +48,21 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
-  mail:
-    smtp:
-      auth: true
-      starttls:
-        required: true
-        enable: true
-      socketFactory:
-        class: javax.net.ssl.SSLSocketFactory
-        fallback: false
-        port: 465
+mail:
+  smtp:
+    port: 465
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
       port: 465
 
-  AdminMail:
-    id: [ ID ]
-    password: [ PW ]
+AdminMail:
+  id: waither.umc@gmail.com
+  password: ghdaioaimzagyths
 
 
 
