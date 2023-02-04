@@ -19,6 +19,8 @@ public enum BaseResponseStatus {
 
     INVALID(true, 204, "일치하지 않음"),
 
+    INVALID_EMAIL(true, 204, "유효하지 않은 이메일"),
+
     /**
      * 400 : Request 오류
      */
@@ -26,6 +28,8 @@ public enum BaseResponseStatus {
 
     //500 서버 오류
     SERVER_ERROR(false, 500, "서버 오류");
+
+
 
 
 
