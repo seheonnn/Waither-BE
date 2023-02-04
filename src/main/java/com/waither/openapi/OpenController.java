@@ -3,6 +3,7 @@ package com.waither.openapi;
 import com.waither.config.BaseException;
 import com.waither.config.BaseResponse;
 import com.waither.config.BaseResponseStatus.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import com.waither.openapi.model.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 @Log4j2
 @RestController
@@ -31,10 +33,10 @@ public class OpenController {
     요청: x, y 좌표
     응답: GetWeatherRes
      */
+    @ApiOperation(value = "#8 기상 정보 받아오기 api", notes = "Param x, y 에 각각 위도, 경도 받아서 요청 ex) @Param x = 36 y = 127")
     @GetMapping("/")
     public BaseResponse<GetWeatherRes> getWeather(@RequestParam("x") String x, @RequestParam("y") String y) throws Exception{
         try {
-            //log.info("startttt");
             //위경도값 좌표로 변환
             gpt.setLat(Double.parseDouble(x));
             gpt.setLon(Double.parseDouble(y));
@@ -45,7 +47,6 @@ public class OpenController {
             GetWeatherRes getWeatherRes = openProvider.getMainWea(nx,ny);
             return new BaseResponse<>(getWeatherRes);
         } catch (BaseException exception) {
-            //log.info("star");
             return new BaseResponse<>((exception.getStatus()));
         }
     }

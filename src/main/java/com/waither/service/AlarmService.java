@@ -1,14 +1,18 @@
 package com.waither.service;
 
+import com.waither.config.BaseException;
 import com.waither.entities.AlarmEntity;
 import com.waither.entities.UserDetailEntity;
 import com.waither.entities.UserEntity;
 import com.waither.repository.AlarmRepository;
 import com.waither.repository.UserDetailRepository;
 import com.waither.repository.UserRepository;
+import lombok.extern.log4j.Log4j2;
+import org.jsoup.Connection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.rmi.ServerError;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -24,7 +28,9 @@ public class AlarmService {
     private UserDetailRepository userDetailRepository;
 
     @Autowired
-    public AlarmService(AlarmRepository alarmRepository) { this.alarmRepository = alarmRepository; }
+    public AlarmService(AlarmRepository alarmRepository) {
+        this.alarmRepository = alarmRepository;
+    }
 
     //8 알람 생성                                   현재 기온
 //    public String createTempAlarm(Long userIdx, double temp) {
@@ -212,20 +218,18 @@ public class AlarmService {
 //    }
 
     // 9 전체 알람 조회
-    public List<AlarmEntity> myAlarmList(Long userIdx) {
+    public List<AlarmEntity> myAlarmList(Long userIdx) throws BaseException {
         return alarmRepository.findAllByUserIdx(userIdx);
     }
 
     // 10 알람 삭제
-    public boolean delete(Long alarmIdx) {
-        Optional<AlarmEntity> idx = this.alarmRepository.findByAlarmIdx(alarmIdx);
-        if(idx.isPresent()) {
+    public boolean delete(Long alarmIdx) throws BaseException {
+        try {
+            Optional<AlarmEntity> idx = this.alarmRepository.findById(alarmIdx);
             alarmRepository.delete(idx.get());
             return true;
-        }
-        else {
+        }catch (Exception exception){
             return false;
         }
-
     }
 }

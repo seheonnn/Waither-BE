@@ -12,6 +12,12 @@ public enum BaseResponseStatus {
      */
     SUCCESS(true, 200, "로딩 성공"),
 
+    /**
+    * 200: 요청 성공 - POST
+     * */
+    SUCCESS_POST(true,200,"변경 성공"),
+
+    INVALID(true, 204, "일치하지 않음"),
 
     /**
      * 400 : Request 오류
@@ -20,6 +26,8 @@ public enum BaseResponseStatus {
 
     //500 서버 오류
     SERVER_ERROR(false, 500, "서버 오류");
+
+
 
     private final boolean isSuccess;
     private final int code;

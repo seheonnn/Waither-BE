@@ -1,10 +1,11 @@
 package com.waither.entities;
 
 import com.waither.dto.UserDetailDTO;
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 
@@ -70,8 +71,8 @@ public class UserDetailEntity {
     @ColumnDefault("'Y'")
     private char windAlarm;
 
-    @Column(name = "windValue", nullable = false)
-    private Integer windValue;
+    @Column(name = "windValue")
+    private int windValue;
 
     @Column(name = "rainFall", nullable = false)
     @ColumnDefault("'Y'")

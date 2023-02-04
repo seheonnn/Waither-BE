@@ -1,10 +1,10 @@
 package com.waither.entities;
 
 import com.waither.dto.UserDTO;
-import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import javax.persistence.*;
 @Entity(name = "User")
 @Table(name = "User")
 @Getter
@@ -22,17 +22,14 @@ public class UserEntity {
     @Column(name = "name", nullable = false)
     private String userName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = true)
     private String email;
 
-    @Column(name = "id", nullable = false)
-    private String id;
+    @Column(name = "authId", nullable = true)
+    private String authId;
 
-    @Column(name = "pw", nullable = false)
+    @Column(name = "pw", nullable = true)
     private String pw;
-
-    @Column(name = "refreshToken") // 로그인 토큰
-    private String refreshToken;
 
     @Column(name = "provider") // 로그인 형태 (ex: 카카오, 애플 ...)
     private String provider;
@@ -44,16 +41,22 @@ public class UserEntity {
     @ColumnDefault("'A'")
     private char status;
 
+    public void changeName(String name){
+        this.userName = name;
+    }
+
+    public void changePw(String pw){
+        this.pw = pw;
+    }
+
     public UserDTO toDTO() {
         return UserDTO.builder()
                 .userName(userName)
                 .email(email)
-                .id(id)
+                .authId(authId)
                 .pw(pw)
-                .refreshToken(refreshToken)
                 .provider(provider)
                 .role(provider)
-                .role(role)
                 .status(status)
                 .build();
     }
