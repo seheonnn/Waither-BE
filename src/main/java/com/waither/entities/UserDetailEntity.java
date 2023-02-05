@@ -71,8 +71,8 @@ public class UserDetailEntity {
     @ColumnDefault("'Y'")
     private char windAlarm;
 
-    @Column(name = "windValue", nullable = false)
-    private Integer windValue;
+    @Column(name = "windValue")
+    private int windValue;
 
     @Column(name = "rainFall", nullable = false)
     @ColumnDefault("'Y'")

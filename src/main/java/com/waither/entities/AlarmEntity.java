@@ -26,7 +26,7 @@ public class AlarmEntity {
     private Long userIdx;
 
     @Column(name = "contents", nullable = false)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String contents;
 
     @Column(name = "createdAt", nullable = false)

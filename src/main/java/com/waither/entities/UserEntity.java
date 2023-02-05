@@ -41,6 +41,14 @@ public class UserEntity {
     @ColumnDefault("'A'")
     private char status;
 
+    public void changeName(String name){
+        this.userName = name;
+    }
+
+    public void changePw(String pw){
+        this.pw = pw;
+    }
+
     public UserDTO toDTO() {
         return UserDTO.builder()
                 .userName(userName)

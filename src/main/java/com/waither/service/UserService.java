@@ -1,15 +1,20 @@
 package com.waither.service;
 
-import com.waither.UserData;
+import com.waither.config.BaseResponseStatus;
+import com.waither.model.UserData;
+import com.waither.config.BaseException;
 import com.waither.entities.UserDetailEntity;
 import com.waither.entities.UserEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
 import com.waither.mapping.WindAlarmMapping;
+import com.waither.model.UserInfo;
 import com.waither.repository.UserDetailRepository;
 import com.waither.repository.UserRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -17,6 +22,7 @@ import static org.thymeleaf.util.ListUtils.size;
 
 //import static org.hibernate.Hibernate.size;
 
+@Log4j2
 @Service
 public class UserService {
 
@@ -30,7 +36,10 @@ public class UserService {
     }
 
     // 7 설문 답변 저장
-    public boolean savedSurvey(Long userIdx, String type, Integer value) {
+    @Transactional
+    public boolean savedSurvey(Long userIdx, String type, Integer value) throws BaseException {
+        log.info("type");
+        log.info("value");
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
 
         if (type.equals("veryHot")) {
@@ -50,14 +59,15 @@ public class UserService {
     }
 
     // 11 설정 메인화면 조회
-    public Optional<MainDataMapping> getMainData(Long userIdx) {
+    public Optional<MainDataMapping> getMainData(Long userIdx) throws BaseException {
         Optional<MainDataMapping> mainData = userDetailRepository.findMainData(userIdx);
 
         return mainData;
     }
 
     // 12 설정 메인화면 변경
-    public boolean updateMainData(Long userIdx, char rainFall, char dust, char wind) {
+    @Transactional
+    public boolean updateMainData(Long userIdx, char rainFall, char dust, char wind) throws BaseException {
         Optional<UserDetailEntity> userDetailEntity = userDetailRepository.findById(userIdx);
         if(userDetailEntity.isPresent()) {
             userDetailEntity.get().setRainFall(rainFall);
@@ -69,7 +79,7 @@ public class UserService {
             return false;
     }
     // 13 사용자 설정 데이터 조회
-    public UserData getUserData(Long userIdx) {
+    public UserData getUserData(Long userIdx) throws BaseException{
         int sumVC = 0;
         int sumC = 0;
         int sumG = 0;
@@ -106,7 +116,8 @@ public class UserService {
     }
 
     // 14 사용자 설정 데이터 변경
-    public boolean updateUserData(Long userIdx, String type, Integer value) {
+    @Transactional
+    public boolean updateUserData(Long userIdx, String type, Integer value) throws BaseException{
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         if (type.equals("veryHot")) {
             userData.setVeryHot(value);
@@ -125,13 +136,14 @@ public class UserService {
     }
 
     // 15 사용자 알람 설정 조회
-    public Optional<UserAlarmMapping> getAlarmData(Long userIdx) {
+    public Optional<UserAlarmMapping> getAlarmData(Long userIdx) throws BaseException {
         Optional<UserAlarmMapping> userAlarmMapping = userDetailRepository.findUserAlarm(userIdx);
         return userAlarmMapping;
     }
 
     // 16 알람 설정 변경
-    public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm) {
+    @Transactional
+    public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm)  throws  BaseException{
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setMon(Mon);
         userData.setTue(Tue);
@@ -149,16 +161,59 @@ public class UserService {
     }
 
     // 17 사용자 바람 세기 설정 조회
-    public Optional<WindAlarmMapping> getWindAlarm(Long userIdx) {
+    public Optional<WindAlarmMapping> getWindAlarm(Long userIdx)  throws BaseException{
         Optional<WindAlarmMapping> windAlarmMapping = userDetailRepository.findWindAlarm(userIdx);
         return windAlarmMapping;
     }
 
     // 18 사용자 바람 세기 설정 변경
-    public boolean updateWindAlarm(Long userIdx, Character windAlarm, Integer windValue) {
+    @Transactional
+    public boolean updateWindAlarm(Long userIdx, Character windAlarm, Integer windValue) throws BaseException{
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setWindAlarm(windAlarm);
         userData.setWindValue(windValue);
+        return true;
+    }
+
+    //19 회원정보 조회
+    public UserInfo getUserInfo(Long userIdx) throws BaseException{
+        UserInfo userInfo = new UserInfo();
+        Optional<UserEntity> user = userRepository.findById(userIdx);
+        userInfo.setName(user.get().getUserName());
+        userInfo.setEmail(user.get().getEmail());
+        return userInfo;
+    }
+
+
+    //20 회원이름 변경
+    @Transactional
+    public boolean updateUserName(Long userIdx, String name) throws BaseException{
+        try{
+            Optional<UserEntity> user = userRepository.findById(userIdx);
+            if(user.isPresent()){
+                log.info(user.get().getUserName());
+                user.get().changeName(name);
+                log.info(user.get().getUserName());
+                log.info(name);
+                return true;
+            }
+        }catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.REQUEST_ERROR);
+        }
+        return false;
+    }
+
+    //21 비밀번호 일치 확인
+    public boolean pwValidation(Long userIdx, String pw) throws BaseException{
+        Optional<UserEntity> user = userRepository.findById(userIdx);
+        return user.filter(userEntity -> pw.equals(userEntity.getPw())).isPresent();
+    }
+
+    //22 비밀번호 재설정
+    @Transactional
+    public boolean updatePw(Long userIdx, String pw) throws BaseException{
+        Optional<UserEntity> user = userRepository.findById(userIdx);
+        user.ifPresent(userEntity -> userEntity.changePw(pw));
         return true;
     }
 

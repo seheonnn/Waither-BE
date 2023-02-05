@@ -1,4 +1,4 @@
-package com.waither;
+package com.waither.model;
 
 import lombok.Getter;
 import lombok.Setter;
