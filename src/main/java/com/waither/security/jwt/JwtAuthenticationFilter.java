@@ -1,5 +1,6 @@
 package com.waither.security.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
@@ -30,16 +31,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { //GenericFil
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = resolveToken(httpServletRequest); //header에서 accessToken 추출
-        String requestUri = httpServletRequest.getRequestURI();
+//        String requestUri = httpServletRequest.getRequestURI();
 
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) { //accessToken 유효성 validate
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            logger.debug("Security Context에 '{}' 인증 정보 저장, uri: {}", authentication.getName(), requestUri);
+            Authentication authentication = jwtTokenProvider.getAuthentication(token); //token으로부터 유저 정보 get
+            SecurityContextHolder.getContext().setAuthentication(authentication); //security context에 저장
+//            logger.debug("Security Context에 '{}' 인증 정보 저장, uri: {}", authentication.getName(), requestUri);
         } else {
-            logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestUri);
+//            logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestUri);
         }
-        filterChain.doFilter(request, response);
+        try{
+            System.out.println("filterChain 동작");
+            filterChain.doFilter(request,response);
+        }catch (ExpiredJwtException e){
+            log.info("expired jwt filter");
+        }
     }
 
     //request header 토큰 정보 get
