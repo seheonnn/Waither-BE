@@ -45,6 +45,9 @@ public class OpenController {
             String ny = String.valueOf((int)gpt.getyLon());
             //
             GetWeatherRes getWeatherRes = openProvider.getMainWea(nx,ny);
+
+            // --------------------알람 생성
+
             return new BaseResponse<>(getWeatherRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
