@@ -3,6 +3,7 @@ package com.waither.openapi;
 import com.waither.config.BaseException;
 import com.waither.config.BaseResponse;
 import com.waither.config.BaseResponseStatus.*;
+import com.waither.service.AlarmService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,6 @@ public class OpenController {
             String ny = String.valueOf((int)gpt.getyLon());
             //
             GetWeatherRes getWeatherRes = openProvider.getMainWea(nx,ny);
-
-            // --------------------알람 생성
 
             return new BaseResponse<>(getWeatherRes);
         } catch (BaseException exception) {

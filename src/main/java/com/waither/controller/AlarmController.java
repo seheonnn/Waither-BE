@@ -3,6 +3,9 @@ package com.waither.controller;
 import com.waither.config.BaseException;
 import com.waither.config.BaseResponse;
 import com.waither.entities.AlarmEntity;
+import com.waither.openapi.OpenProvider;
+import com.waither.openapi.model.GetWeatherRes;
+import com.waither.openapi.model.GpsTransfer;
 import com.waither.service.AlarmService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +26,46 @@ public class AlarmController {
     @Autowired
     AlarmService alarmService;
 
-    // 8 알람 생성
-//    @ResponseBody
-//    @GetMapping("main")
-//    public ResponseEntity<String> createAlarm (@RequestParam("userIdx") Long userIdx                           ) {
+    @Autowired
+    private final OpenProvider openProvider;
 
-//        String tempAlarm = alarmService.createTempAlarm(userIdx,         );
-//        String outAlarm = alarmService.createOutAlarm(userIdx,         );
-//        String climateAlarm = alarmService.createClimateAlarm(userIdx, );
-//        String customAlarm = alarmService.createCustomAlarm(userIdx, );
-//        String rainAlarm = alarmService.createRainAlarm(userIdx, );
-//        String snowAlarm = alarmService.createSnowAlarm(userIdx, );
-//        String windAlarm = alarmService.createWindAlarm(userIdx, windValue);
+    GpsTransfer gpt = new GpsTransfer();
 
-        //
-//    }
+    // 알람 생성
+    @ApiOperation(value = "#8 기상 정보 받아오기 api", notes = "Param x, y 에 각각 위도, 경도 받아서 요청 ex) @Param x = 36 y = 127")
+    @GetMapping("/create")
+    public BaseResponse<GetWeatherRes> getWeather(@RequestParam("x") String x, @RequestParam("y") String y) throws Exception{
+        try {
+            //위경도값 좌표로 변환
+            gpt.setLat(Double.parseDouble(x));
+            gpt.setLon(Double.parseDouble(y));
+            gpt.transfer(gpt,0);
+            String nx = String.valueOf((int)gpt.getxLat());
+            String ny = String.valueOf((int)gpt.getyLon());
+            //
+            GetWeatherRes getWeatherRes = openProvider.getMainWea(nx,ny);
+
+            // --------------------알람 생성
+            String tempAlarmContents = alarmService.createTempAlarm(userIdx, getWeatherRes.getTmp());
+            String outAlarmContents = alarmService.createOutAlarm(userIdx, getWeatherRes);
+
+            //기후 알람
+            alarmService.createClimateAlarm(userIdx);
+
+            //소나기 알람
+            alarmService.createRainAlarm(userIdx, getWeatherRes.getTime(), getWeatherRes.getExpect_rn1(), getWeatherRes.getExpect_rn2(), getWeatherRes.getExpect_rn3(), getWeatherRes.getExpect_rn4(), getWeatherRes.getExpect_rn5(), getWeatherRes.getExpect_rn6());
+
+            //강설 알람
+            alarmService.createSnowAlarm(userIdx);
+
+            //설정 풍속 알람
+            alarmService.createWindAlarm(userIdx, getWeatherRes.getWsd());
+
+            return new BaseResponse<>(getWeatherRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     // 9 전체 알람 조회
     @ApiOperation(value = "#9 전체 알람 조회 api", notes = "Param에 userIdx담아서 요청 ex) @Param userIdx = 1")
