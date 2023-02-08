@@ -45,23 +45,26 @@ public class AlarmController {
             //
             GetWeatherRes getWeatherRes = openProvider.getMainWea(nx,ny);
 
+            Long userIdx = 1L;
+            
             // --------------------알람 생성
             String tempAlarmContents = alarmService.createTempAlarm(userIdx, getWeatherRes.getTmp());
             String outAlarmContents = alarmService.createOutAlarm(userIdx, getWeatherRes);
 
             //기후 알람
-            alarmService.createClimateAlarm(userIdx);
+            String climateAlarmContents = alarmService.createClimateAlarm(userIdx);
 
             //소나기 알람
-            alarmService.createRainAlarm(userIdx, getWeatherRes.getTime(), getWeatherRes.getExpect_rn1(), getWeatherRes.getExpect_rn2(), getWeatherRes.getExpect_rn3(), getWeatherRes.getExpect_rn4(), getWeatherRes.getExpect_rn5(), getWeatherRes.getExpect_rn6());
+            String rainAlarmContents = alarmService.createRainAlarm(userIdx, getWeatherRes.getTime(), getWeatherRes.getExpect_rn1(), getWeatherRes.getExpect_rn2(), getWeatherRes.getExpect_rn3(), getWeatherRes.getExpect_rn4(), getWeatherRes.getExpect_rn5(), getWeatherRes.getExpect_rn6());
 
             //강설 알람
-            alarmService.createSnowAlarm(userIdx);
+            String snowAlarmContents = alarmService.createSnowAlarm(userIdx);
 
             //설정 풍속 알람
-            alarmService.createWindAlarm(userIdx, getWeatherRes.getWsd());
+            String windAlarmContents = alarmService.createWindAlarm(userIdx, getWeatherRes.getWsd());
 
-            return new BaseResponse<>(getWeatherRes);
+            // 알람 생성 후 Response 정해야
+            return new BaseResponse<>();
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

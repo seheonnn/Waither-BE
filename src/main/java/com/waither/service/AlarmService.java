@@ -242,12 +242,14 @@ public class AlarmService {
     }
 
     public String createRainAlarm(Long userIdx, String getTime, String rn1, String rn2, String rn3, String rn4, String rn5, String rn6) {
-        AlarmEntity newAlarm = new AlarmEntity();
+
         UserDetailEntity user = userDetailRepository.findById(userIdx).get();
 
         int time = Integer.parseInt(getTime);
 
         if(user.getRainAlarm() == 'Y') {
+            AlarmEntity newAlarm = new AlarmEntity();
+
             if(!Objects.equals(rn1, "0")){
                 time += 3600;
             }
@@ -283,38 +285,44 @@ public class AlarmService {
             newAlarm.setContents(hour + ":" + minute + "분부터 소나기가 와요!\n" +
                     "우산을 챙겨가세요.");
             newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+            this.alarmRepository.saveAndFlush(newAlarm);
+            return newAlarm.getContents();
         }
-        this.alarmRepository.saveAndFlush(newAlarm);
-        return newAlarm.getContents();
+        return null;
     }
 
     //강설 정보 api 없음
     public String createSnowAlarm(Long userIdx) {
-        AlarmEntity newAlarm = new AlarmEntity();
+
         UserDetailEntity user = userDetailRepository.findById(userIdx).get();
 
         if(user.getSnowAlarm() == 'Y') {
+            AlarmEntity newAlarm = new AlarmEntity();
             newAlarm.setUserIdx(userIdx);
             newAlarm.setContents("오늘은 눈이 와요!\n" +
                     "우산을 챙겨가세요.");
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             newAlarm.setCreatedAt(ts);
+            this.alarmRepository.saveAndFlush(newAlarm);
+            return newAlarm.getContents();
         }
-        this.alarmRepository.saveAndFlush(newAlarm);
-        return newAlarm.getContents();
+        return null;
     }
 
     public String createWindAlarm(Long userIdx, double windValue) {
-        AlarmEntity newAlarm = new AlarmEntity();
+
         UserDetailEntity user = userDetailRepository.findById(userIdx).get();
 
         if(user.getWindAlarm() == 'Y' && user.getWindValue() < windValue) {
+            AlarmEntity newAlarm = new AlarmEntity();
+
             newAlarm.setUserIdx(userIdx);
             newAlarm.setContents("현재 풍속은 " + windValue + "으로 설정하신 풍속보다 높습니다.");
             newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+            this.alarmRepository.saveAndFlush(newAlarm);
+            return newAlarm.getContents();
         }
-        this.alarmRepository.saveAndFlush(newAlarm);
-        return newAlarm.getContents();
+        return null;
     }
 
 
