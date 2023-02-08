@@ -34,7 +34,7 @@ public class AlarmController {
     // 알람 생성
     @ApiOperation(value = "#8 기상 정보 받아오기 api", notes = "Param x, y 에 각각 위도, 경도 받아서 요청 ex) @Param x = 36 y = 127")
     @GetMapping("/create")
-    public BaseResponse<GetWeatherRes> getWeather(@RequestParam("x") String x, @RequestParam("y") String y) throws Exception{
+    public BaseResponse<GetWeatherRes> createAlarm(@RequestParam("x") String x, @RequestParam("y") String y) throws Exception{
         try {
             //위경도값 좌표로 변환
             gpt.setLat(Double.parseDouble(x));
