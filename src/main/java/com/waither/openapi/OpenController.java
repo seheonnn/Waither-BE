@@ -30,7 +30,7 @@ public class OpenController {
 
 
     /*메인화면에 필요한 데이터 반환
-    요청: x, y 좌표
+    요청: x 위도값, y 경도값
     응답: GetWeatherRes
      */
     @ApiOperation(value = "#8 기상 정보 받아오기 api", notes = "Param x, y 에 각각 위도, 경도 받아서 요청 ex) @Param x = 36 y = 127")
@@ -50,12 +50,10 @@ public class OpenController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
-    /*설문데이터 저장할때 필요한 데이터 반환
+    
+     /*설문데이터 저장할때 필요한 데이터 반환
     요청: 날짜, 시간, 지역이름
     응답: 기온 */
-
-
     /*@GetMapping("/past/")
     public GetPastWeatherRes getPastWeather(@RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("region") String region) throws Exception{
         try {

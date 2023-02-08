@@ -10,8 +10,6 @@ import lombok.Setter;
 
 public class GetPastWeatherRes {
     private double tmp;
-//    private double vec;
-//    private double reh;
 
     public GetPastWeatherRes() {
 
