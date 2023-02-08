@@ -72,7 +72,7 @@ public class UserDetailEntity {
     private char windAlarm;
 
     @Column(name = "windValue")
-    private double windValue;
+    private int windValue;
 
     @Column(name = "rainFall", nullable = false)
     @ColumnDefault("'Y'")

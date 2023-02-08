@@ -43,7 +43,7 @@ public class UserDetailDTO {
 
     private char windAlarm;
 
-    private double windValue;
+    private int windValue;
 
     private char rainFall;
 
