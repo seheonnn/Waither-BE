@@ -1,13 +1,13 @@
-#server:
-#  port: 443
-#  ssl:
-#    enable: true
-#    enabled-protocols:
-#      - TLSv1.1
-#      - TLSv1.2
-#    key-store: "/etc/pki/tls/certs/waither/waither.p12"
-#    key-store-password: "waither0330"
-#    key-store-type: "PKCS12"
+server:
+  port: 443
+  ssl:
+    enable: true
+    enabled-protocols:
+      - TLSv1.1
+      - TLSv1.2
+    key-store: "/etc/pki/tls/certs/waither/waither.p12"
+    key-store-password: "waither0330"
+    key-store-type: "PKCS12"
 
 
 spring:
