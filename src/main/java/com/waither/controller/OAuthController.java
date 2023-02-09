@@ -1,12 +1,12 @@
 package com.waither.controller;
 
 import com.waither.domain.JsonResponse;
+import com.waither.dto.OAuthDto;
+import com.waither.security.oauth.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
@@ -27,11 +27,13 @@ public class OAuthController {
 
     }
 
-    //OAUth2 성공 - redirect uri로 token 반환
+    //OAuth2 성공 - redirect uri로 token 반환
     @GetMapping("/token")
     public ResponseEntity<JsonResponse> token(@PathParam("token") String accessToken){
         log.info("OAuth2 Login Token Response");
         return ResponseEntity.ok(new JsonResponse(200,"login-getToken", accessToken));
     }
+
+
 
 }
