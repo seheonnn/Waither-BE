@@ -16,14 +16,14 @@ public class GetWeatherRes {
     private String date;
     private String time;
     private double tmp;
-    private double tmn;
-    private double tmx;
+    private int tmn;
+    private int tmx;
     private double rn1;
-    private double vec;
+    private int vec;
     private double wsd;
     private double reh;
     private int pm10_value;
-    private int pm10_grade;
+    private String pm10_grade;
 
     private double expect_tmp1;
     private double expect_tmp2;
@@ -38,6 +38,14 @@ public class GetWeatherRes {
     private String expect_rn4;
     private String expect_rn5;
     private String expect_rn6;
+
+    //하늘상태(맑음, 구름많음, 흐림)
+    private String expect_sky1;
+    private String expect_sky2;
+    private String expect_sky3;
+    private String expect_sky4;
+    private String expect_sky5;
+    private String expect_sky6;
 
 
     public GetWeatherRes() {

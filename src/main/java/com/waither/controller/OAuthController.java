@@ -21,8 +21,8 @@ public class OAuthController {
     @GetMapping("/login/{provider}")
     public void oauthLogin(@PathVariable String provider, HttpServletResponse response)throws IOException {
         log.info("OAuth2 Login");
-        String redirect_uri = "http://localhost:8080/oauth2/authorization/" + provider; // <- 이거 주석하고
-//        String redirect_uri = "https://waither.shop/oauth2/authorization/" + provider; // <- 이거 주석 풀기
+//        String redirect_uri = "http://localhost:8080/oauth2/authorization/" + provider; // <- 이거 주석하고
+        String redirect_uri = "https://waither.shop/oauth2/authorization/" + provider; // <- 이거 주석 풀기
         response.sendRedirect(redirect_uri);
 
     }

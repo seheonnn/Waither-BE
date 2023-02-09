@@ -5,9 +5,15 @@ import com.waither.openapi.model.GetWeatherRes;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,17 +26,38 @@ public class OpenDao {
     GetWeatherRes mainDto = new GetWeatherRes();
     String dataType = "JSON";
 
-    //단기 예보 조회-> 크롤링으로 일 최고/최저 기온 조회
-
     //메인페이지 조회
     public GetWeatherRes getMainWea(String nx, String ny) throws Exception {
         //초단기 실황
         getUltraSc(nx,ny);
-        //초단기 예보_기온
-        getUltraFaTemp(nx,ny);
-        //초단기 예보_강수량
-        getUltraFaAm(nx,ny);
+        //초단기 예보
+        getUltraFa(nx,ny);
         //미세먼지
+        getAir("경기");
+        //일 최고, 최저기온
+        CrawlingTemp("수원시");
+
+        return mainDto;
+    }
+
+    //하루 최고,최저 기온 조회
+    public GetWeatherRes CrawlingTemp(String region) throws Exception{
+        String URL = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="+region+"+날씨";
+        Document doc = Jsoup.connect(URL).get();
+        Elements min = doc.select(".cs_weather_new .weekly_forecast_area .week_item.today .day_data .cell_temperature .temperature_inner .lowest");
+        String[] mstr = min.text().split(" ");
+        Elements max = doc.select(".cs_weather_new .weekly_forecast_area .week_item.today .day_data .cell_temperature .temperature_inner .highest");
+        String[] Mstr = max.text().split(" ");
+
+        String minStr = mstr[0];
+        String maxStr = Mstr[0];
+
+        //숫자만 추출
+        String minsamp = minStr.substring(4,minStr.length()-1);
+        String maxsamp = maxStr.substring(4,maxStr.length()-1);
+
+        mainDto.setTmx(Integer.parseInt(maxsamp));
+        mainDto.setTmn(Integer.parseInt(minsamp));
 
         return mainDto;
     }
@@ -96,10 +123,9 @@ public class OpenDao {
 
         //데이터 수신완료
         //json 파싱
-
         Double temp = null;
         Double rainAmount = null;
-        Double direction=null;
+        int direction=0;
         Double speed=null;
         Double humid = null;
 
@@ -124,7 +150,7 @@ public class OpenDao {
                     rainAmount = obsrValue;
                     break;
                 case "VEC":
-                    direction = obsrValue;
+                    direction = (int) obsrValue;
                     break;
                 case "WSD":
                     speed = obsrValue;
@@ -148,43 +174,21 @@ public class OpenDao {
     }
 
     //미세먼지 실황 조회
-
-
-    //초단기 예보 조회_강수량
-    public GetWeatherRes getUltraFaAm(String nx, String ny) throws Exception{
-
+    public GetWeatherRes getAir(String region) throws Exception{
         // 변수 설정
         //초단기 실황 조회
-        String apiURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst";
+        String apiURL = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty";
         String authKey = "Xs2%2Frnfl80eyOtrEWs0Y4yBvqtH0Fv2LH5yDf836On7erI0qnhiIOBArWJAMTEiTfd5M4D%2B8WUVtXkU5EhGMJw%3D%3D"; // 개인 서비스 키
 
-        //요청 날짜와 시간 받아서 계산
-        LocalDateTime now = LocalDateTime.now();
-        String baseDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        int hour = now.getHour();
-        int min = now.getMinute();
-        String baseTime = "";
-        //hour=00일때는?
-        if(min <= 30) { // 해당 시각 발표 전에는 자료가 없음 - 이전시각을 기준으로
-            hour -= 1;
-        }
-        if(hour<10){
-            baseTime = "0" + hour + "00"; // baseTime는 매 시 30분으로 호출됨
-        }
-        else {
-            baseTime = hour + "00"; // 정시 기준 호출 가능
-        }
-        int intTime = Integer.parseInt(baseTime);
 
         StringBuilder urlBuilder = new StringBuilder(apiURL);
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + authKey);
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("6", "UTF-8")); // 표 개수
-        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("3", "UTF-8")); // 페이지
-        urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode(dataType, "UTF-8")); // 반환 타입
-        urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + URLEncoder.encode(baseDate, "UTF-8")); // 조회 날짜
-        urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode(baseTime, "UTF-8")); // 조회 시간
-        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(nx, "UTF-8")); // x좌표
-        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); // y좌표
+        urlBuilder.append("&" + URLEncoder.encode("returnType", "UTF-8") + "=" + URLEncoder.encode(dataType, "UTF-8")); // 반환 타입
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); // 반환 타입
+        urlBuilder.append("&" + URLEncoder.encode("pageNo=1", "UTF-8"));    // 페이지 수
+        urlBuilder.append("&" + URLEncoder.encode("sidoName", "UTF-8") + "=" + URLEncoder.encode(region, "UTF-8")); // 지역명
+        urlBuilder.append("&" + URLEncoder.encode("ver", "UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8")); // 호출 버전
+
 
         URL url = new URL(urlBuilder.toString());
         System.out.println(url);
@@ -213,52 +217,44 @@ public class OpenDao {
 
         //데이터 수신완료
         //json 파싱
+
+        int value = 0;
+        String grade = "";
+
         JSONParser jsonParser = new JSONParser();
+
         JSONObject jObject =  (JSONObject) jsonParser.parse(result);
         JSONObject response = (JSONObject) jObject.get("response");
         JSONObject body = (JSONObject) response.get("body");
-        JSONObject items = (JSONObject) body.get("items");
-        JSONArray jArray = (JSONArray) items.get("item");
-
-        System.out.println("배열사이즈는"+jArray.size());
+        JSONArray jArray = (JSONArray) body.get("items");
 
         for(int i = 0; i < jArray.size(); i++) {
             JSONObject obj = (JSONObject) jArray.get(i);
-            //int fcstTime = Integer.valueOf((String) obj.get("fcstTime"));
-            String fcstValue = (String) obj.get("fcstValue");
-            //double fcstValue = Double.valueOf((String) obj.get("fcstValue"));
-
-            if(fcstValue.equals("강수없음")){
-                fcstValue="0";
+            value = Integer.valueOf((String) obj.get("pm10Value"));
+            grade = (String) obj.get("pm10Grade");
+            
+            if(grade.equals("1")){
+                grade="좋음";
             }
-
-            if(i==0){
-                mainDto.setExpect_rn1(fcstValue);
+            else if(grade.equals("2")){
+                grade="보통";
             }
-            else if(i==1) {
-                mainDto.setExpect_rn2(fcstValue);
+            else if(grade.equals("3")){
+                grade="나쁨";
             }
-            else if(i==2) {
-                mainDto.setExpect_rn3(fcstValue);
-            }
-            else if(i==3) {
-                mainDto.setExpect_rn4(fcstValue);
-            }
-            else if(i==4) {
-                mainDto.setExpect_rn5(fcstValue);
-            }
-            else if(i==5) {
-                mainDto.setExpect_rn6(fcstValue);
+            else if(grade.equals("4")){
+                grade="매우나쁨";
             }
         }
+
+        mainDto.setPm10_value(value);
+        mainDto.setPm10_grade(grade);
+
         return mainDto;
     }
 
-    //초단기 예보 조회_기온
-    public GetWeatherRes getUltraFaTemp(String x, String y) throws Exception{
-
-        // 변수 설정
-        //초단기 실황 조회
+    //초단기예보조회(기온, 강수량, 하늘상태)
+    public GetWeatherRes getUltraFa(String x, String y) throws Exception{
         String apiURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst";
         String authKey = "Xs2%2Frnfl80eyOtrEWs0Y4yBvqtH0Fv2LH5yDf836On7erI0qnhiIOBArWJAMTEiTfd5M4D%2B8WUVtXkU5EhGMJw%3D%3D"; // 개인 서비스 키
 
@@ -273,17 +269,17 @@ public class OpenDao {
             hour -= 1;
         }
         if(hour<10){
-            baseTime = "0" + hour + "00"; // baseTime는 매 시 30분으로 호출됨
+            baseTime = "0" + hour + "00";
         }
         else {
-            baseTime = hour + "00"; // 정시 기준 호출 가능
+            baseTime = hour + "00";
         }
         int intTime = Integer.parseInt(baseTime);
 
         StringBuilder urlBuilder = new StringBuilder(apiURL);
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + authKey);
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("6", "UTF-8")); // 표 개수
-        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("5", "UTF-8")); // 페이지
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("1000", "UTF-8")); // 표 개수
+        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); // 페이지
         urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode(dataType, "UTF-8")); // 반환 타입
         urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + URLEncoder.encode(baseDate, "UTF-8")); // 조회 날짜
         urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode(baseTime, "UTF-8")); // 조회 시간
@@ -324,28 +320,87 @@ public class OpenDao {
         JSONObject items = (JSONObject) body.get("items");
         JSONArray jArray = (JSONArray) items.get("item");
 
+
         for(int i = 0; i < jArray.size(); i++) {
             JSONObject obj = (JSONObject) jArray.get(i);
+            String category = (String) obj.get("category");
             int fcstTime = Integer.valueOf((String) obj.get("fcstTime"));
-            double fcstValue = Double.valueOf((String) obj.get("fcstValue"));
+            String fcstValue = (String) obj.get("fcstValue");
 
-            if(fcstTime==(intTime+100)){
-                mainDto.setExpect_tmp1(fcstValue);
-            }
-            else if(fcstTime==(intTime+200)) {
-                mainDto.setExpect_tmp2(fcstValue);
-            }
-            else if(fcstTime==(intTime+300)) {
-                mainDto.setExpect_tmp3(fcstValue);
-            }
-            else if(fcstTime==(intTime+400)) {
-                mainDto.setExpect_tmp4(fcstValue);
-            }
-            else if(fcstTime==(intTime+500)) {
-                mainDto.setExpect_tmp5(fcstValue);
-            }
-            else if(fcstTime==(intTime+600)) {
-                mainDto.setExpect_tmp6(fcstValue);
+            switch (category) {
+                case "T1H":
+                    if(fcstTime==(intTime+100)){
+                        mainDto.setExpect_tmp1(Double.parseDouble(fcstValue));
+                    }
+                    else if(fcstTime==(intTime+200)) {
+                        mainDto.setExpect_tmp2(Double.parseDouble(fcstValue));
+                    }
+                    else if(fcstTime==(intTime+300)) {
+                        mainDto.setExpect_tmp3(Double.parseDouble(fcstValue));
+                    }
+                    else if(fcstTime==(intTime+400)) {
+                        mainDto.setExpect_tmp4(Double.parseDouble(fcstValue));
+                    }
+                    else if(fcstTime==(intTime+500)) {
+                        mainDto.setExpect_tmp5(Double.parseDouble(fcstValue));
+                    }
+                    else if(fcstTime==(intTime+600)) {
+                        mainDto.setExpect_tmp6(Double.parseDouble(fcstValue));
+                    }
+                    break;
+                case "RN1":
+                    if(fcstValue.equals("강수없음")){
+                        fcstValue="0";
+                    }
+                    if(fcstTime==(intTime+100)){
+                        mainDto.setExpect_rn1(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+200)) {
+                        mainDto.setExpect_rn2(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+300)) {
+                        mainDto.setExpect_rn3(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+400)) {
+                        mainDto.setExpect_rn4(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+500)) {
+                        mainDto.setExpect_rn5(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+600)) {
+                        mainDto.setExpect_rn6(fcstValue);
+                    }
+                    break;
+                case "SKY":
+                    if(fcstValue.equals("1")){
+                        fcstValue="맑음";
+                    }
+                    else if(fcstValue.equals("3")){
+                        fcstValue="구름많음";
+                    }
+                    else if(fcstValue.equals("4")){
+                        fcstValue="흐림";
+                    }
+
+                    if(fcstTime==(intTime+100)){
+                        mainDto.setExpect_sky1(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+200)) {
+                        mainDto.setExpect_sky2(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+300)) {
+                        mainDto.setExpect_sky3(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+400)) {
+                        mainDto.setExpect_sky4(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+500)) {
+                        mainDto.setExpect_sky5(fcstValue);
+                    }
+                    else if(fcstTime==(intTime+600)) {
+                        mainDto.setExpect_sky6(fcstValue);
+                    }
+                    break;
             }
         }
         return mainDto;

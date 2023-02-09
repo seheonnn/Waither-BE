@@ -14,7 +14,6 @@ import static com.waither.config.BaseResponseStatus.*;
 @RequiredArgsConstructor
 @Service
 public class OpenProvider {
-
     private final OpenDao openDao;
 
     // 메인화면 날씨 데이터 조회(실황, 예보)
