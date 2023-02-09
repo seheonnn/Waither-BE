@@ -47,6 +47,8 @@ public class GetWeatherRes {
     private String expect_sky5;
     private String expect_sky6;
 
+    private String daynight;
+
 
     public GetWeatherRes() {
 

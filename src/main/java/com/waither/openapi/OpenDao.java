@@ -33,7 +33,7 @@ public class OpenDao {
         //초단기 예보
         getUltraFa(nx,ny);
         //미세먼지
-        getAir("경기");
+        getAir("부산");
         //일 최고, 최저기온
         CrawlingTemp("수원시");
 
@@ -42,13 +42,16 @@ public class OpenDao {
 
     //하루 최고,최저 기온 조회
     public GetWeatherRes CrawlingTemp(String region) throws Exception{
+        System.out.println("크롤링 들어옴");
         String URL = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="+region+"+날씨";
         Document doc = Jsoup.connect(URL).get();
         Elements min = doc.select(".cs_weather_new .weekly_forecast_area .week_item.today .day_data .cell_temperature .temperature_inner .lowest");
         String[] mstr = min.text().split(" ");
         Elements max = doc.select(".cs_weather_new .weekly_forecast_area .week_item.today .day_data .cell_temperature .temperature_inner .highest");
         String[] Mstr = max.text().split(" ");
+        Elements sunStr = doc.select(".cs_weather_new .report_card_wrap .item_today.type_sun .title");
 
+        String sun = sunStr.text();
         String minStr = mstr[0];
         String maxStr = Mstr[0];
 
@@ -56,8 +59,16 @@ public class OpenDao {
         String minsamp = minStr.substring(4,minStr.length()-1);
         String maxsamp = maxStr.substring(4,maxStr.length()-1);
 
+        if(sun.equals("일출")){
+            sun="밤";
+        }
+        else{
+            sun="낮";
+        }
+
         mainDto.setTmx(Integer.parseInt(maxsamp));
         mainDto.setTmn(Integer.parseInt(minsamp));
+        mainDto.setDaynight(sun);
 
         return mainDto;
     }
