@@ -30,8 +30,10 @@ public class AlarmService {
     private UserDetailRepository userDetailRepository;
 
     @Autowired
-    public AlarmService(AlarmRepository alarmRepository) {
+    public AlarmService(AlarmRepository alarmRepository, UserRepository userRepository, UserDetailRepository userDetailRepository) {
         this.alarmRepository = alarmRepository;
+        this.userRepository = userRepository;
+        this.userDetailRepository = userDetailRepository;
     }
 
     //8 알람 생성                                   현재 기온
@@ -53,21 +55,24 @@ public class AlarmService {
             }
 
             if (min == Math.abs(user.getVeryHot() - temp))
-                newAlarm.setContents("오늘은" + u.getUserName() + "님이 설정하신 매우 더움 온도에 가까운 " + temp + "도예요");
+                newAlarm.setContents("오늘은 " + u.getUserName() + "님이 설정하신 매우 더움 온도에 가까운 " + temp + "도예요");
 
             else if (min == Math.abs(user.getHot() - temp))
-                newAlarm.setContents("오늘은" + u.getUserName() + "님이 설정하신 더움 온도에 가까운 " + temp + "도예요");
+                newAlarm.setContents("오늘은 " + u.getUserName() + "님이 설정하신 더움 온도에 가까운 " + temp + "도예요");
 
             else if (min == Math.abs(user.getGood() - temp)) // *************
-                newAlarm.setContents("오늘은" + u.getUserName() + "님이 설정하신 좋음 온도에 가까운 " + temp + "도예요");
+                newAlarm.setContents("오늘은 " + u.getUserName() + "님이 설정하신 좋음 온도에 가까운 " + temp + "도예요");
 
             else if (min == Math.abs(user.getCold() - temp))
-                newAlarm.setContents("오늘은" + u.getUserName() + "님이 설정하신 추움 온도에 가까운 " + temp + "도예요");
+                newAlarm.setContents("오늘은 " + u.getUserName() + "님이 설정하신 추움 온도에 가까운 " + temp + "도예요");
 
             else if (min == Math.abs(user.getVeryCold() - temp))
-                newAlarm.setContents("오늘은" + u.getUserName() + "님이 설정하신 매우 추움 온도에 가까운 " + temp + "도예요");
+                newAlarm.setContents("오늘은 " + u.getUserName() + "님이 설정하신 매우 추움 온도에 가까운 " + temp + "도예요");
 
             newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+            List<AlarmEntity> all = alarmRepository.findAll();
+
             this.alarmRepository.saveAndFlush(newAlarm);
             return newAlarm.getContents();
         }
@@ -160,6 +165,7 @@ public class AlarmService {
 
         if(user.getRainAlarm() == 'Y') {
             AlarmEntity newAlarm = new AlarmEntity();
+            newAlarm.setUserIdx(userIdx);
 
             if(!Objects.equals(rn1, "0")){
                 time += 3600;
