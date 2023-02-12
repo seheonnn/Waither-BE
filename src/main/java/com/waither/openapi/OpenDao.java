@@ -29,11 +29,11 @@ public class OpenDao {
     //메인페이지 조회
     public GetWeatherRes getMainWea(String nx, String ny) throws Exception {
         //초단기 실황
-        //getUltraSc(nx,ny);
+        getUltraSc(nx,ny);
         //초단기 예보
-        //getUltraFa(nx,ny);
+        getUltraFa(nx,ny);
         //미세먼지
-        //getAir("부산");
+        getAir("부산");
         //일 최고, 최저기온
         CrawlingTemp("수원시");
 
@@ -42,9 +42,8 @@ public class OpenDao {
         return mainDto;
     }
 
-    //하루 최고,최저 기온 조회
+    //하루 최고,최저 기온, 현재 하늘상태 조회
     public GetWeatherRes CrawlingTemp(String region) throws Exception{
-        System.out.println("크롤링 들어옴");
         String URL = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="+region+"+날씨";
         Document doc = Jsoup.connect(URL).get();
         //일 최저기온
@@ -59,29 +58,23 @@ public class OpenDao {
         Elements sky = doc.select(".cs_weather_new .weather_main .wt_icon .blind");
         String[] sStr = sky.text().split(" ");
         String skyStr = sStr[0];
-        //일출일몰 기준 낮밤 구분
-        Elements sun = doc.select(".cs_weather_new .report_card_wrap .item_today.type_sun .title");
-        String sunStr = sun.text();
-
-
-
-
-
+        
         //숫자만 추출
         String minsamp = minStr.substring(4,minStr.length()-1);
         String maxsamp = maxStr.substring(4,maxStr.length()-1);
 
-        if(sunStr.equals("일출")){
-            sunStr="밤";
-        }
-        else{
-            sunStr="낮";
-        }
+        //일출일몰 기준 낮밤 구분
+        Elements sun = doc.select(".cs_weather_new .report_card_wrap .item_today.type_sun .title");
+        String sunStr = sun.text();
+        Elements stimeStr = doc.select(".cs_weather_new .report_card_wrap .item_today.type_sun .txt");
+        String stime = stimeStr.text();
+        stime = stime.substring(0,2)+stime.substring(3);
+        sunStr = sunStr+stime;
 
+        mainDto.setDaynight(sunStr);
         mainDto.setTmx(Integer.parseInt(maxsamp));
         mainDto.setTmn(Integer.parseInt(minsamp));
         mainDto.setSky(skyStr);
-        mainDto.setDaynight(sunStr);
 
         return mainDto;
     }
@@ -277,7 +270,7 @@ public class OpenDao {
         return mainDto;
     }
 
-    //초단기예보조회(기온, 강수량, 하늘상태)
+    //초단기예보조회(기온, 강수형태, 하늘상태)
     public GetWeatherRes getUltraFa(String x, String y) throws Exception{
         String apiURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst";
         String authKey = "Xs2%2Frnfl80eyOtrEWs0Y4yBvqtH0Fv2LH5yDf836On7erI0qnhiIOBArWJAMTEiTfd5M4D%2B8WUVtXkU5EhGMJw%3D%3D"; // 개인 서비스 키
@@ -290,7 +283,9 @@ public class OpenDao {
         String baseTime = "";
         //hour=00일때는?
         if(min <= 30) { // 해당 시각 발표 전에는 자료가 없음 - 이전시각을 기준으로
-            hour -= 1;
+            if(hour!=0){
+                hour -= 1;
+            }
         }
         if(hour<10){
             baseTime = "0" + hour + "00";
@@ -344,9 +339,7 @@ public class OpenDao {
         JSONObject items = (JSONObject) body.get("items");
         JSONArray jArray = (JSONArray) items.get("item");
 
-
         int j=0;
-
         for(int i = 0; i < jArray.size(); i++) {
             JSONObject obj = (JSONObject) jArray.get(i);
             String category = (String) obj.get("category");
