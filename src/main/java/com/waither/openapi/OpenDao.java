@@ -29,14 +29,16 @@ public class OpenDao {
     //메인페이지 조회
     public GetWeatherRes getMainWea(String nx, String ny) throws Exception {
         //초단기 실황
-        getUltraSc(nx,ny);
+        //getUltraSc(nx,ny);
         //초단기 예보
-        getUltraFa(nx,ny);
+        //getUltraFa(nx,ny);
         //미세먼지
-        getAir("부산");
+        //getAir("부산");
         //일 최고, 최저기온
         CrawlingTemp("수원시");
 
+        //강설정보
+        //getSnowfall(nx,ny);
         return mainDto;
     }
 
@@ -45,30 +47,41 @@ public class OpenDao {
         System.out.println("크롤링 들어옴");
         String URL = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="+region+"+날씨";
         Document doc = Jsoup.connect(URL).get();
+        //일 최저기온
         Elements min = doc.select(".cs_weather_new .weekly_forecast_area .week_item.today .day_data .cell_temperature .temperature_inner .lowest");
         String[] mstr = min.text().split(" ");
+        String minStr = mstr[0];
+        //일 최고기온
         Elements max = doc.select(".cs_weather_new .weekly_forecast_area .week_item.today .day_data .cell_temperature .temperature_inner .highest");
         String[] Mstr = max.text().split(" ");
-        Elements sunStr = doc.select(".cs_weather_new .report_card_wrap .item_today.type_sun .title");
-
-        String sun = sunStr.text();
-        String minStr = mstr[0];
         String maxStr = Mstr[0];
+        //현재 하늘상태
+        Elements sky = doc.select(".cs_weather_new .weather_main .wt_icon .blind");
+        String[] sStr = sky.text().split(" ");
+        String skyStr = sStr[0];
+        //일출일몰 기준 낮밤 구분
+        Elements sun = doc.select(".cs_weather_new .report_card_wrap .item_today.type_sun .title");
+        String sunStr = sun.text();
+
+
+
+
 
         //숫자만 추출
         String minsamp = minStr.substring(4,minStr.length()-1);
         String maxsamp = maxStr.substring(4,maxStr.length()-1);
 
-        if(sun.equals("일출")){
-            sun="밤";
+        if(sunStr.equals("일출")){
+            sunStr="밤";
         }
         else{
-            sun="낮";
+            sunStr="낮";
         }
 
         mainDto.setTmx(Integer.parseInt(maxsamp));
         mainDto.setTmn(Integer.parseInt(minsamp));
-        mainDto.setDaynight(sun);
+        mainDto.setSky(skyStr);
+        mainDto.setDaynight(sunStr);
 
         return mainDto;
     }
@@ -332,6 +345,8 @@ public class OpenDao {
         JSONArray jArray = (JSONArray) items.get("item");
 
 
+        int j=0;
+
         for(int i = 0; i < jArray.size(); i++) {
             JSONObject obj = (JSONObject) jArray.get(i);
             String category = (String) obj.get("category");
@@ -340,26 +355,28 @@ public class OpenDao {
 
             switch (category) {
                 case "T1H":
-                    if(fcstTime==(intTime+100)){
+                    j++;
+                    if(j==1){
                         mainDto.setExpect_tmp1(Double.parseDouble(fcstValue));
                     }
-                    else if(fcstTime==(intTime+200)) {
+                    else if(j==2) {
                         mainDto.setExpect_tmp2(Double.parseDouble(fcstValue));
                     }
-                    else if(fcstTime==(intTime+300)) {
+                    else if(j==3) {
                         mainDto.setExpect_tmp3(Double.parseDouble(fcstValue));
                     }
-                    else if(fcstTime==(intTime+400)) {
+                    else if(j==4) {
                         mainDto.setExpect_tmp4(Double.parseDouble(fcstValue));
                     }
-                    else if(fcstTime==(intTime+500)) {
+                    else if(j==5) {
                         mainDto.setExpect_tmp5(Double.parseDouble(fcstValue));
                     }
-                    else if(fcstTime==(intTime+600)) {
+                    else if(j==6) {
                         mainDto.setExpect_tmp6(Double.parseDouble(fcstValue));
+                        j=0;
                     }
                     break;
-                case "RN1":
+                /*case "RN1":
                     if(fcstValue.equals("강수없음")){
                         fcstValue="0";
                     }
@@ -381,8 +398,52 @@ public class OpenDao {
                     else if(fcstTime==(intTime+600)) {
                         mainDto.setExpect_rn6(fcstValue);
                     }
+                    break;*/
+                case "PTY":
+                    j++;
+                    if(fcstValue.equals("0")){
+                        fcstValue="없음";
+                    }
+                    else if(fcstValue.equals("1")){
+                        fcstValue="비";
+                    }
+                    else if(fcstValue.equals("2")){
+                        fcstValue="비/눈";
+                    }
+                    else if(fcstValue.equals("3")){
+                        fcstValue="눈";
+                    }
+                    else if(fcstValue.equals("5")){
+                        fcstValue="빗방울";
+                    }
+                    else if(fcstValue.equals("6")){
+                        fcstValue="빗방울눈날림";
+                    }
+                    else if(fcstValue.equals("7")){
+                        fcstValue="눈날림";
+                    }
+                    if(j==1){
+                        mainDto.setExpect_pty1(fcstValue);
+                    }
+                    else if(j==2) {
+                        mainDto.setExpect_pty2(fcstValue);
+                    }
+                    else if(j==3) {
+                        mainDto.setExpect_pty3(fcstValue);
+                    }
+                    else if(j==4) {
+                        mainDto.setExpect_pty4(fcstValue);
+                    }
+                    else if(j==5) {
+                        mainDto.setExpect_pty5(fcstValue);
+                    }
+                    else if(j==6) {
+                        mainDto.setExpect_pty6(fcstValue);
+                        j=0;
+                    }
                     break;
                 case "SKY":
+                    j++;
                     if(fcstValue.equals("1")){
                         fcstValue="맑음";
                     }
@@ -393,23 +454,24 @@ public class OpenDao {
                         fcstValue="흐림";
                     }
 
-                    if(fcstTime==(intTime+100)){
+                    if(j==1){
                         mainDto.setExpect_sky1(fcstValue);
                     }
-                    else if(fcstTime==(intTime+200)) {
+                    else if(j==2) {
                         mainDto.setExpect_sky2(fcstValue);
                     }
-                    else if(fcstTime==(intTime+300)) {
+                    else if(j==3) {
                         mainDto.setExpect_sky3(fcstValue);
                     }
-                    else if(fcstTime==(intTime+400)) {
+                    else if(j==4) {
                         mainDto.setExpect_sky4(fcstValue);
                     }
-                    else if(fcstTime==(intTime+500)) {
+                    else if(j==5) {
                         mainDto.setExpect_sky5(fcstValue);
                     }
-                    else if(fcstTime==(intTime+600)) {
+                    else if(j==6) {
                         mainDto.setExpect_sky6(fcstValue);
+                        j=0;
                     }
                     break;
             }
@@ -474,6 +536,92 @@ public class OpenDao {
             pastDto.setTmp(ta);
         }
         return pastDto;
+    }
+    
+    //강설시간 조회
+    public String getSnowfall(String nx, String ny) throws Exception{
+        // 변수 설정
+        //초단기 실황 조회
+        String apiURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
+        String authKey = "Xs2%2Frnfl80eyOtrEWs0Y4yBvqtH0Fv2LH5yDf836On7erI0qnhiIOBArWJAMTEiTfd5M4D%2B8WUVtXkU5EhGMJw%3D%3D"; // 개인 서비스 키
+
+        //요청 날짜와 시간 받아서 계산
+        LocalDateTime now = LocalDateTime.now();
+        String baseDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        int hour = now.getHour();
+        int min = now.getMinute();
+        String baseTime = "";
+        //hour=00일때는?
+        if(min <= 30) { // 해당 시각 발표 전에는 자료가 없음 - 이전시각을 기준으로
+            hour -= 1;
+        }
+        if(hour<10){
+            baseTime = "0" + hour + "00"; // 정시 기준 호출 가능
+        }
+        else {
+            baseTime = hour + "00"; // 정시 기준 호출 가능
+        }
+
+        StringBuilder urlBuilder = new StringBuilder(apiURL);
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + authKey);
+        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); // 페이지 수
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("288", "UTF-8")); // 표 개수
+        urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode(dataType, "UTF-8")); // 반환 타입
+        urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + URLEncoder.encode(baseDate, "UTF-8")); // 조회 날짜
+        urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode(baseTime, "UTF-8")); // 조회 시간
+        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(nx, "UTF-8")); // x좌표
+        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); // y좌표
+
+        URL url = new URL(urlBuilder.toString());
+        System.out.println(url);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        System.out.println("Response code: " + conn.getResponseCode());
+        BufferedReader rd;
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder data = new StringBuilder();
+
+        String line;
+        while ((line = rd.readLine()) != null) {
+            data.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        String result = data.toString();
+
+        // 테스트를 위해 콘솔 출력
+        System.out.println(result);
+
+        //데이터 수신완료
+        //json 파싱
+        String snTime = "9999";
+
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jObject =  (JSONObject) jsonParser.parse(result);
+        JSONObject response = (JSONObject) jObject.get("response");
+        JSONObject body = (JSONObject) response.get("body");
+        JSONObject items = (JSONObject) body.get("items");
+        JSONArray jArray = (JSONArray) items.get("item");
+
+        for(int i = 0; i < jArray.size(); i++) {
+            JSONObject obj = (JSONObject) jArray.get(i);
+            String category = (String) obj.get("category");
+            //캐스팅 변환이 아니라 String 클래스의 valueOf(Object)로 가져오기
+            /*double obsrValue = Double.valueOf((String) obj.get("obsrValue"));
+
+            switch (category) {
+                case "PTY":
+                    snTime = obsrValue;
+                    break;
+            }*/
+        }
+
+        return "";
     }
 
 }
