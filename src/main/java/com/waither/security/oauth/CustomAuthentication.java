@@ -19,15 +19,15 @@ import java.util.Map;
 public class CustomAuthentication implements OAuth2User, UserDetails {
 
     private String id;
-    private String email;
+//    private String email;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Setter
     private Map<String, Object> attributes;
 
-    public CustomAuthentication(String id, String email, Collection<? extends GrantedAuthority> authorities) {
+    public CustomAuthentication(String id, /*String email, */Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.email = email;
+//        this.email = email;
         this.authorities = authorities;
     }
 
@@ -37,7 +37,7 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
                 "" + RoleType.USER));
         return new CustomAuthentication(
                 user.getAuthId(),
-                user.getEmail(),
+//                user.getEmail(),
                 authorityList
         );
     }
@@ -46,7 +46,7 @@ public class CustomAuthentication implements OAuth2User, UserDetails {
         log.info("CustomAuthentication create : " + attributes.toString());
         CustomAuthentication customAuthentication = CustomAuthentication.create(user);
         customAuthentication.setAttributes(attributes);
-        log.info("CustomAuthentication create : " + customAuthentication.id + customAuthentication.email);
+        log.info("CustomAuthentication create : " + customAuthentication.id);
         return customAuthentication;
     }
 

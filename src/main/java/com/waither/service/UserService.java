@@ -218,14 +218,14 @@ public class UserService {
     }
 
     public boolean emailValidation(String email) throws BaseException{
-        Optional<UserEntity> user = userRepository.findUserByEmail(email);
-        if(user.get().getEmail().equals(email)){
+        UserEntity user = userRepository.findUserByEmail(email);
+        if(user.getEmail().equals(email)){
             return true;
         } else return false;
     }
 
     public Long findUserByEmail(String email) throws Exception{
-        return userRepository.findUserByEmail(email).get().getUserIdx();
+        return userRepository.findUserByEmail(email).getUserIdx();
     }
 
     UserEntity[] users;
