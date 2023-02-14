@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
+import java.sql.Time;
 import java.util.*;
 
 import static org.thymeleaf.util.ListUtils.size;
@@ -168,7 +169,7 @@ public class UserService {
 
     // 16 알람 설정 변경
     @Transactional
-    public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm)  throws  BaseException{
+    public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, String outTime ,Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm)  throws  BaseException{
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setMon(Mon);
         userData.setTue(Tue);
@@ -177,6 +178,7 @@ public class UserService {
         userData.setFri(Fri);
         userData.setSat(Sat);
         userData.setSun(Sun);
+        userData.setOutTime(Time.valueOf(outTime));
         userData.setOutAlarm(outAlarm);
         userData.setClimateAlarm(climateAlarm);
         userData.setCustomAlarm(customAlarm);
