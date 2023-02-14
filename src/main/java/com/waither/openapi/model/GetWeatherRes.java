@@ -22,6 +22,9 @@ public class GetWeatherRes {
     private int vec;
     private double wsd;
     private double reh;
+    private String sky;
+    private String daynight;
+    
     private int pm10_value;
     private String pm10_grade;
 
@@ -32,12 +35,13 @@ public class GetWeatherRes {
     private double expect_tmp5;
     private double expect_tmp6;
 
-    private String expect_rn1;
-    private String expect_rn2;
-    private String expect_rn3;
-    private String expect_rn4;
-    private String expect_rn5;
-    private String expect_rn6;
+    //강수형태
+    private String expect_pty1;
+    private String expect_pty2;
+    private String expect_pty3;
+    private String expect_pty4;
+    private String expect_pty5;
+    private String expect_pty6;
 
     //하늘상태(맑음, 구름많음, 흐림)
     private String expect_sky1;
@@ -47,9 +51,13 @@ public class GetWeatherRes {
     private String expect_sky5;
     private String expect_sky6;
 
-
+    private String expect_rn1;
+    private String expect_rn2;
+    private String expect_rn3;
+    private String expect_rn4;
+    private String expect_rn5;
+    private String expect_rn6;
     public GetWeatherRes() {
 
     }
-
 }

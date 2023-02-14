@@ -1,5 +1,7 @@
 package com.waither.mapping;
 
+import java.sql.Time;
+
 public interface UserAlarmMapping {
     Character getMon();
     Character getTue();
@@ -8,6 +10,8 @@ public interface UserAlarmMapping {
     Character getFri();
     Character getSat();
     Character getSun();
+
+    Time getOutTime();
     Character getOutAlarm();
     Character getClimateAlarm();
     Character getCustomAlarm();

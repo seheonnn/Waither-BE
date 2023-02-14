@@ -13,10 +13,15 @@ public class UserData {
     private Integer hot;
     private Integer veryHot;
 
-    private int avgVC;
-    private int avgC;
-    private int avgG;
-    private int avgH;
-    private int avgVH;
+    private int veryColdMode;
+    private int vC_p;
+    private int coldMode;
+    private int c_p;
+    private int goodMode;
+    private int g_p;
+    private int hotMode;
+    private int h_p;
+    private int veryHotMode;
+    private int vH_p;
 
 }
