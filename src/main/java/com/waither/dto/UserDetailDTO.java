@@ -38,7 +38,7 @@ public class UserDetailDTO {
     private char customAlarm;
 
 
-//    private char rainAlarm;
+    private char rainAlarm;
 
 //    private char snowAlarm;
 
@@ -93,7 +93,7 @@ public class UserDetailDTO {
                 .outAlarm(outAlarm)
                 .climateAlarm(climateAlarm)
                 .customAlarm(customAlarm)
-//                .rainAlarm(rainAlarm)
+                .rainAlarm(rainAlarm)
 //                .snowAlarm(snowAlarm)
                 .windAlarm(windAlarm)
                 .windValue(windValue)
