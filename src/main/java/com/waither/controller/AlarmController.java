@@ -51,11 +51,14 @@ public class AlarmController {
             //기후 알람
             String climateAlarmContents = alarmService.createClimateAlarm(userIdx);
 
-            //소나기 알람
-            String rainAlarmContents = alarmService.createRainAlarm(userIdx, getWeatherRes.getTime(), getWeatherRes.getExpect_rn1(), getWeatherRes.getExpect_rn2(), getWeatherRes.getExpect_rn3(), getWeatherRes.getExpect_rn4(), getWeatherRes.getExpect_rn5(), getWeatherRes.getExpect_rn6());
+            //강수 알람(강수 & 강설)
+            alarmService.createRainfallAlarm(userIdx, );
 
-            //강설 알람
-            String snowAlarmContents = alarmService.createSnowAlarm(userIdx);
+//            //소나기 알람
+//            String rainAlarmContents = alarmService.createRainAlarm(userIdx, getWeatherRes.getTime(), getWeatherRes.getExpect_rn1(), getWeatherRes.getExpect_rn2(), getWeatherRes.getExpect_rn3(), getWeatherRes.getExpect_rn4(), getWeatherRes.getExpect_rn5(), getWeatherRes.getExpect_rn6());
+//
+//            //강설 알람
+//            String snowAlarmContents = alarmService.createSnowAlarm(userIdx);
 
             //설정 풍속 알람
             String windAlarmContents = alarmService.createWindAlarm(userIdx, getWeatherRes.getWsd());
