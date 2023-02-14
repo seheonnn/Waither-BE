@@ -1,6 +1,7 @@
 package com.waither.service;
 
 import com.waither.config.BaseResponseStatus;
+import com.waither.mapping.UserDataMapping;
 import com.waither.model.UserData;
 import com.waither.config.BaseException;
 import com.waither.entities.UserDetailEntity;
@@ -16,7 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.math.BigInteger;
+import java.util.*;
 
 import static org.thymeleaf.util.ListUtils.size;
 
@@ -80,36 +82,59 @@ public class UserService {
     }
     // 13 사용자 설정 데이터 조회
     public UserData getUserData(Long userIdx) throws BaseException{
-        int sumVC = 0;
-        int sumC = 0;
-        int sumG = 0;
-        int sumH = 0;
-        int sumVH = 0;
 
         Optional<UserDetailEntity> user = userDetailRepository.findById(userIdx);
-
         UserData ud = new UserData();
 
-        int s = size(userDetailRepository.findAll());
-        for (UserDetailEntity userDetailEntity : userDetailRepository.findAll()) {
-            sumVC += userDetailEntity.getVeryCold();
-            sumC += userDetailEntity.getCold();
-            sumG += userDetailEntity.getGood();
-            sumH += userDetailEntity.getHot();
-            sumVH += userDetailEntity.getVeryHot();
-        }
-
+        //사용자 설정값
         ud.setVeryCold(user.get().getVeryCold());
         ud.setCold(user.get().getCold());
         ud.setGood(user.get().getGood());
         ud.setHot(user.get().getHot());
         ud.setVeryHot(user.get().getVeryHot());
 
-        ud.setAvgVC(sumVC / s);
-        ud.setAvgC(sumC / s);
-        ud.setAvgG(sumG / s);
-        ud.setAvgH(sumH / s);
-        ud.setAvgVH(sumVH / s);
+
+        //최빈값
+        int s = size(userRepository.findAll());
+        ud.setVeryColdMode((Integer) userDetailRepository.getVeryColdMode().get(0)[0]);
+        ud.setVC_p((int) ((((BigInteger) userDetailRepository.getVeryColdMode().get(0)[1]).doubleValue()/s)*100));
+
+        ud.setColdMode((Integer) userDetailRepository.getVeryColdMode().get(0)[0]);
+        ud.setC_p((int) ((((BigInteger) userDetailRepository.getColdMode().get(0)[1]).doubleValue()/s)*100));
+
+        ud.setGoodMode((Integer) userDetailRepository.getVeryColdMode().get(0)[0]);
+        ud.setG_p((int) ((((BigInteger) userDetailRepository.getGoodMode().get(0)[1]).doubleValue()/s)*100));
+
+        ud.setHotMode((Integer) userDetailRepository.getVeryColdMode().get(0)[0]);
+        ud.setH_p((int) ((((BigInteger) userDetailRepository.getHotMode().get(0)[1]).doubleValue()/s)*100));
+
+        ud.setVeryHotMode((Integer) userDetailRepository.getVeryColdMode().get(0)[0]);
+        ud.setVH_p((int) ((((BigInteger) userDetailRepository.getVeryHotMode().get(0)[1]).doubleValue()/s)*100));
+
+//
+//        int sumVC = 0;
+//        int sumC = 0;
+//        int sumG = 0;
+//        int sumH = 0;
+//        int sumVH = 0;
+//
+//        UserData ud = new UserData();
+//
+//        int s = size(userDetailRepository.findAll());
+//        for (UserDetailEntity userDetailEntity : userDetailRepository.findAll()) {
+//            sumVC += userDetailEntity.getVeryCold();
+//            sumC += userDetailEntity.getCold();
+//            sumG += userDetailEntity.getGood();
+//            sumH += userDetailEntity.getHot();
+//            sumVH += userDetailEntity.getVeryHot();
+//        }
+//
+//
+//        ud.setAvgVC(sumVC / s);
+//        ud.setAvgC(sumC / s);
+//        ud.setAvgG(sumG / s);
+//        ud.setAvgH(sumH / s);
+//        ud.setAvgVH(sumVH / s);
 
 
         return ud;

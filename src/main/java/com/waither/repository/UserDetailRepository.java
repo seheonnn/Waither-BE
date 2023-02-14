@@ -3,12 +3,12 @@ package com.waither.repository;
 import com.waither.entities.UserDetailEntity;
 import com.waither.mapping.MainDataMapping;
 import com.waither.mapping.UserAlarmMapping;
-import com.waither.mapping.UserDataMapping;
 import com.waither.mapping.WindAlarmMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserDetailRepository extends JpaRepository<UserDetailEntity, Long> {
@@ -21,4 +21,25 @@ public interface UserDetailRepository extends JpaRepository<UserDetailEntity, Lo
 
     @Query(value = "select u.windAlarm as windAlarm, u.windValue as windValue from UserDetail u where u.userIdx = :userIdx")
     Optional<WindAlarmMapping> findWindAlarm(@Param("userIdx") Long userIdx);
+
+    //very cold 최빈값, count
+    @Query(value = "select very_cold, max(count) from (select very_cold, count(very_cold)as count from user_detail group by very_cold) as count", nativeQuery = true)
+    List<Object[]> getVeryColdMode();
+
+    //very cold 최빈값, count
+    @Query(value = "select cold, max(count) from (select cold, count(cold)as count from user_detail group by cold) as count", nativeQuery = true)
+    List<Object[]> getColdMode();
+
+    //very cold 최빈값, count
+    @Query(value = "select good, max(count) from (select good, count(good)as count from user_detail group by good) as count", nativeQuery = true)
+    List<Object[]> getGoodMode();
+
+    //very cold 최빈값, count
+    @Query(value = "select hot, max(count) from (select hot, count(hot)as count from user_detail group by hot) as count", nativeQuery = true)
+    List<Object[]> getHotMode();
+
+    //very cold 최빈값, count
+    @Query(value = "select very_hot, max(count) from (select very_hot, count(very_hot)as count from user_detail group by very_hot) as count", nativeQuery = true)
+    List<Object[]> getVeryHotMode();
+
 }
