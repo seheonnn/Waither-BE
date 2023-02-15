@@ -158,7 +158,7 @@ public class AlarmService {
     }
 
     // 강수 알람 (강수 & 강설)
-    public String createRainfallAlarm(Long userIdx) {
+    public String createRainfallAlarm(Long userIdx, String getTime, String pty1, String pty2, String pty3, String pty4, String pty5, String pty6) {
         return null;
     }
 
