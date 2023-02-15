@@ -105,8 +105,8 @@ public class UserController {
     }
 
     //16 알람 설정 변경
-    @ApiOperation(value = "#16 알람 설정 변경 api", notes = "Param에 userIdx, Body에 String:String으로 Mon, Tue, Wed, Thu, Fri, Sat, Sun, outTime ,outAlarm, climateAlarm, customAlarm, rainAlarm, snowAlarm을 담아서 요청" +
-            "\nex){\"Mon\": \"Y\" , \"Tue\": \"Y\", \"Wed\": \"Y\", \"Thu\": \"Y\", \"Fri\": \"Y\", \"Sat\": \"N\", \"Sun\": \"N\",\"outTime\":\"08:00:00\" ,\"outAlarm\": \"Y\", \"climateAlarm\": \"Y\", \"customAlarm\": \"Y\", \"rainAlarm\": \"Y\", \"customAlarm\": \"Y\", \"snowAlarm\": \"Y\" } " +
+    @ApiOperation(value = "#16 알람 설정 변경 api", notes = "Param에 userIdx, Body에 String:String으로 Mon, Tue, Wed, Thu, Fri, Sat, Sun, outAlarm, climateAlarm, customAlarm, rainAlarm을 담아서 요청" +
+            "\nex){\"Mon\": \"Y\" , \"Tue\": \"Y\", \"Wed\": \"Y\", \"Thu\": \"Y\", \"Fri\": \"Y\", \"Sat\": \"N\", \"Sun\": \"N\", \"outAlarm\": \"Y\", \"climateAlarm\": \"Y\", \"customAlarm\": \"Y\", \"rainAlarm\": \"Y\", \"customAlarm\": \"Y\" } " +
             "\n 각 요일 : on/off, outAlarm : 외출 알람 설정 on/off, climateAlarm : 기상 예보 알람 on/off, customAlarm : 사용자 맞춤 알람 on/off, rainAlarm : 소나기 알람 받기 on/off, snowAlarm : 강설 정보 받기 on/off")
     @ResponseBody
     @PostMapping("/settings/alarm")
@@ -114,8 +114,8 @@ public class UserController {
         try {
             userService.updateAlarmData(userIdx,
                     request.get("Mon").charAt(0), request.get("Tue").charAt(0), request.get("Wed").charAt(0), request.get("Thu").charAt(0), request.get("Fri").charAt(0), request.get("Sat").charAt(0), request.get("Sun").charAt(0),
-                    request.get("outTime"),request.get("outAlarm").charAt(0), request.get("climateAlarm").charAt(0), request.get("customAlarm").charAt(0),
-                    request.get("rainAlarm").charAt(0), request.get("snowAlarm").charAt(0));
+                    request.get("outAlarm").charAt(0), request.get("climateAlarm").charAt(0), request.get("customAlarm").charAt(0),
+                    request.get("rainAlarm").charAt(0));
             return new BaseResponse<>();
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
