@@ -154,47 +154,48 @@ public class AlarmService {
 
         UserDetailEntity user = userDetailRepository.findById(userIdx).get();
 
-        int time = Integer.parseInt(getTime);
+        int time = Integer.parseInt(getTime) / 100;
 
         int t = 0;
         String cast = "";
+        pty3 = "눈날림";
 
         if(user.getRainAlarm() == 'Y') {
 
             if(!pty1.equals("없음")) {
-                t = 3600;
+                t = 1;
                 cast = pty1;
             }
             else if (!pty2.equals("없음")) {
-                t = 7200;
+                t = 2;
                 cast = pty2;
             }
             else if (!pty3.equals("없음")) {
-                t = 10800;
+                t = 3;
                 cast = pty3;
             }
             else if (!pty4.equals("없음")) {
-                t = 14400;
+                t = 4;
                 cast = pty4;
             }
             else if (!pty5.equals("없음")) {
-                t = 18000;
+                t = 5;
                 cast = pty5;
             }
             else if (!pty6.equals("없음")) {
-                t = 21600;
+                t = 6;
                 cast = pty6;
             }
 
             if(!cast.equals(""))
             {
                 AlarmEntity newAlarm = new AlarmEntity();
-                newAlarm.setAlarmIdx(userIdx);
+                newAlarm.setUserIdx(userIdx);
                 time+=t;
 
-                int hour = time/(60*60);
-                int minute = time/60-(hour*60);
-                newAlarm.setContents(hour + ":" + minute + "에 " + cast + " 예보가 있어요 !\n"
+                System.out.println(time);
+
+                newAlarm.setContents(time + "시부터 " + cast + " 예보가 있어요!\n"
                         + "우산을 챙겨 가세요.");
                 newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
                 alarmRepository.saveAndFlush(newAlarm);
