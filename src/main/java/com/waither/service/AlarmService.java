@@ -82,50 +82,42 @@ public class AlarmService {
     public String createOutAlarm(Long userIdx, GetWeatherRes getWeatherRes) {
         UserDetailEntity user = userDetailRepository.findById(userIdx).get();
 
-        LocalTime lt = LocalTime.now();
+//        LocalTime lt = LocalTime.now();
         LocalDate ld = LocalDate.now();
 
-        boolean val = false;
         String day = "";
         switch (ld.getDayOfWeek().getValue()) {
             case 1:
                 if (user.getMon() == 'Y') {
-                    val = true;
                     day = "월요일 ";
                 }
 
             case 2:
                 if (user.getTue() == 'Y') {
-                    val = true;
                     day = "화요일 ";
                 }
             case 3:
                 if (user.getWed() == 'Y') {
-                    val = true;
                     day = "수요일 ";
                 }
             case 4:
                 if (user.getThu() == 'Y') {
-                    val = true;
                     day = "목요일 ";
                 }
             case 5:
                 if (user.getFri() == 'Y') {
-                    val = true;
                     day = "금요일 ";
                 }
             case 6:
                 if (user.getSat() == 'Y') {
-                    val = true;
                     day = "토요일 ";
                 }
             case 7:
                 if (user.getSun() == 'Y') {
-                    val = true;
                     day = "일요일 ";
                 }
         }
-        if (val == true) {
+        if (!day.equals("")) {
             AlarmEntity newAlarm = new AlarmEntity();
             newAlarm.setUserIdx(userIdx);
             String content = day + "오늘 현재 기온은 " + getWeatherRes.getTmp() + "도, 최저 기온은 " + getWeatherRes.getTmn() + "도, 최고 기온은 " + getWeatherRes.getTmx() + "도입니다.";
@@ -159,6 +151,56 @@ public class AlarmService {
 
     // 강수 알람 (강수 & 강설)
     public String createRainfallAlarm(Long userIdx, String getTime, String pty1, String pty2, String pty3, String pty4, String pty5, String pty6) {
+
+        UserDetailEntity user = userDetailRepository.findById(userIdx).get();
+
+        int time = Integer.parseInt(getTime);
+
+        int t = 0;
+        String cast = "";
+
+        if(user.getRainAlarm() == 'Y') {
+
+            if(!pty1.equals("없음")) {
+                t = 3600;
+                cast = pty1;
+            }
+            else if (!pty2.equals("없음")) {
+                t = 7200;
+                cast = pty2;
+            }
+            else if (!pty3.equals("없음")) {
+                t = 10800;
+                cast = pty3;
+            }
+            else if (!pty4.equals("없음")) {
+                t = 14400;
+                cast = pty4;
+            }
+            else if (!pty5.equals("없음")) {
+                t = 18000;
+                cast = pty5;
+            }
+            else if (!pty6.equals("없음")) {
+                t = 21600;
+                cast = pty6;
+            }
+
+            if(!cast.equals(""))
+            {
+                AlarmEntity newAlarm = new AlarmEntity();
+                newAlarm.setAlarmIdx(userIdx);
+                time+=t;
+
+                int hour = time/(60*60);
+                int minute = time/60-(hour*60);
+                newAlarm.setContents(hour + ":" + minute + "에 " + cast + " 예보가 있어요 !\n"
+                        + "우산을 챙겨 가세요.");
+                newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+                alarmRepository.saveAndFlush(newAlarm);
+                return newAlarm.getContents();
+            }
+        }
         return null;
     }
 

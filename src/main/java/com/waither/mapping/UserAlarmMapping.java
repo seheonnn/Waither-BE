@@ -16,5 +16,4 @@ public interface UserAlarmMapping {
     Character getClimateAlarm();
     Character getCustomAlarm();
     Character getRainAlarm();
-    Character getSnowAlarm();
 }

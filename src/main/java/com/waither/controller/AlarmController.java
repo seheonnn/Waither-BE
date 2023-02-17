@@ -48,11 +48,11 @@ public class AlarmController {
 
             Long userIdx = 1L;
 
-            //기후 알람
-            String climateAlarmContents = alarmService.createClimateAlarm(userIdx);
+            //기후 알람 (기상특보 api에 따라 변경)
+//            String climateAlarmContents = alarmService.createClimateAlarm(userIdx);
 
             //강수 알람(강수 & 강설)
-            alarmService.createRainfallAlarm(userIdx, getWeatherRes.getTime(), getWeatherRes.getExpect_pty1(), getWeatherRes.getExpect_pty2(), getWeatherRes.getExpect_pty3(), getWeatherRes.getExpect_pty4(), getWeatherRes.getExpect_pty5(), getWeatherRes.getExpect_pty6());
+            String rainfallAlarmContents = alarmService.createRainfallAlarm(userIdx, getWeatherRes.getTime(), getWeatherRes.getExpect_pty1(), getWeatherRes.getExpect_pty2(), getWeatherRes.getExpect_pty3(), getWeatherRes.getExpect_pty4(), getWeatherRes.getExpect_pty5(), getWeatherRes.getExpect_pty6());
 
 //            //소나기 알람
 //            String rainAlarmContents = alarmService.createRainAlarm(userIdx, getWeatherRes.getTime(), getWeatherRes.getExpect_rn1(), getWeatherRes.getExpect_rn2(), getWeatherRes.getExpect_rn3(), getWeatherRes.getExpect_rn4(), getWeatherRes.getExpect_rn5(), getWeatherRes.getExpect_rn6());
