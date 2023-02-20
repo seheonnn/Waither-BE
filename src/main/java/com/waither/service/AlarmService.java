@@ -224,7 +224,7 @@ public class AlarmService {
                 newAlarm.setContents(time + "시부터 " + cast + " 예보가 있어요!\n"
                         + "우산을 챙겨 가세요.");
                 newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-                if (checkDuplicate(newAlarm)) {
+                if (checkDuplicated(newAlarm)) {
                     alarmRepository.saveAndFlush(newAlarm);
                     return newAlarm.getContents();
 
