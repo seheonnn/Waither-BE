@@ -36,6 +36,19 @@ public class AlarmService {
         this.userDetailRepository = userDetailRepository;
     }
 
+    // 알람 확인 로직
+    public boolean checkDuplicate(AlarmEntity newAlarm) {
+        List<AlarmEntity> alarms = alarmRepository.findAll();
+        boolean val = false;
+        for (AlarmEntity alarm : alarms) {
+            if (alarm.getContents().equals(newAlarm.getContents()))
+                val = false; // 알람 중복 되면
+            else
+                val = true;
+        }
+        return val;
+    }
+
     //8 알람 생성                                   현재 기온
     public String createTempAlarm(Long userIdx, double temp) {
 
@@ -198,8 +211,12 @@ public class AlarmService {
                 newAlarm.setContents(time + "시부터 " + cast + " 예보가 있어요!\n"
                         + "우산을 챙겨 가세요.");
                 newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-                alarmRepository.saveAndFlush(newAlarm);
-                return newAlarm.getContents();
+                if (checkDuplicate(newAlarm)) {
+                    alarmRepository.saveAndFlush(newAlarm);
+                    return newAlarm.getContents();
+
+                }
+                else return null;
             }
         }
         return null;
