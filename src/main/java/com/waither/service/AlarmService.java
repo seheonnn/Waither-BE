@@ -315,7 +315,7 @@ public class AlarmService {
             newAlarm.setContents("현재 풍속은 " + windValue + "으로 설정하신 풍속보다 높습니다.");
             newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-            if (checkDuplicate(newAlarm)) {
+            if (checkDuplicated(newAlarm)) {
                 alarmRepository.saveAndFlush(newAlarm);
                 return newAlarm.getContents();
 
