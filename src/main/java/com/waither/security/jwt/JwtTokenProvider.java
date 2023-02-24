@@ -31,7 +31,7 @@ public class JwtTokenProvider {
     private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 30; //30DAY
     private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 14; //2WEEK
 //    @Value("spring.jwt.secret")
-    private static final String SECRET_KEY = "6B64DCA4E72F58EDIKU9AAB215FE7"; //yml에 설정
+    public static final String SECRET_KEY = "6B64DCA4E72F58EDIKU9AAB215FE7"; //yml에 설정
 
 
     //accessToken 생성

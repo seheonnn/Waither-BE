@@ -47,8 +47,11 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-  jwt:
-    secret: 6B64DCA4E72F58EDIKU9AAB215FE7
+
+
+jwt:
+  secret: 6B64DCA4E72F58EDIKU9AAB215FE7
+
 
 mail:
   smtp:

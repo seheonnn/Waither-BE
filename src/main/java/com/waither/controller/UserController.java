@@ -10,11 +10,9 @@ import com.waither.mapping.WindAlarmMapping;
 import com.waither.model.UserInfo;
 import com.waither.service.JwtService;
 import com.waither.service.UserService;
-import io.jsonwebtoken.Jwt;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.http.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +34,7 @@ public class UserController {
     @PostMapping("/survey")
     public BaseResponse<Void> savedSurvey(HttpServletRequest httpServletRequest, @RequestBody HashMap<String, String> request) throws Exception {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             userService.savedSurvey(userIdx, request.get("type"), Integer.valueOf(request.get("value")));
             return new BaseResponse<>();
         } catch (BaseException exception) {
@@ -50,7 +48,7 @@ public class UserController {
     @GetMapping("/settings")
     public BaseResponse<Optional<MainDataMapping>> getMainData(HttpServletRequest httpServletRequest) throws Exception {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             Optional<MainDataMapping> mainData = userService.getMainData(userIdx);
             assert mainData.isPresent();
             return new BaseResponse<>(mainData);
@@ -65,7 +63,7 @@ public class UserController {
     @PostMapping("/settings")
     public BaseResponse<Void> updateMainData(HttpServletRequest httpServletRequest, @RequestBody HashMap<String, String> request) {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             userService.updateMainData(userIdx, request.get("rainFall").charAt(0), request.get("dust").charAt(0), request.get("wind").charAt(0));
             return new BaseResponse<>();
         } catch (BaseException exception) {
@@ -79,7 +77,7 @@ public class UserController {
     @GetMapping("/settings/userdata")
     public BaseResponse<UserData> getUserData(HttpServletRequest httpServletRequest) {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             UserData userData = userService.getUserData(userIdx);
             return new BaseResponse<>(userData);
         } catch (BaseException exception) {
@@ -93,7 +91,7 @@ public class UserController {
     @PostMapping("/settings/userdata")
     public BaseResponse<Void> updateUserData(HttpServletRequest httpServletRequest, @RequestBody HashMap<String, String> request) {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             userService.updateUserData(userIdx, request.get("type"), Integer.valueOf(request.get("value")));
             return new BaseResponse<>();
         } catch (BaseException exception) {
@@ -107,7 +105,7 @@ public class UserController {
     @GetMapping("/settings/alarm")
     public BaseResponse<Optional<UserAlarmMapping>> getAlarmData(HttpServletRequest httpServletRequest) {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             Optional<UserAlarmMapping> userAlarmData = userService.getAlarmData(userIdx);
             assert userAlarmData.isPresent();
             return new BaseResponse<>(userAlarmData);
@@ -124,7 +122,7 @@ public class UserController {
     @PostMapping("/settings/alarm")
     public BaseResponse<Void> updateAlarmData(HttpServletRequest httpServletRequest, @RequestBody HashMap<String, String> request) {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             userService.updateAlarmData(userIdx,
                     request.get("Mon").charAt(0), request.get("Tue").charAt(0), request.get("Wed").charAt(0), request.get("Thu").charAt(0), request.get("Fri").charAt(0), request.get("Sat").charAt(0), request.get("Sun").charAt(0),
                     request.get("outTime"),request.get("outAlarm").charAt(0), request.get("climateAlarm").charAt(0), request.get("customAlarm").charAt(0),
@@ -141,7 +139,7 @@ public class UserController {
     @GetMapping("/settings/alarm/wind")
     public BaseResponse<Optional<WindAlarmMapping>> getWindAlarm(HttpServletRequest httpServletRequest) {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             Optional<WindAlarmMapping> userWindAlarm = userService.getWindAlarm(userIdx);
             assert userWindAlarm.isPresent();
             return new BaseResponse<>(userWindAlarm);
@@ -156,7 +154,7 @@ public class UserController {
     @PostMapping("/settings/alarm/wind")
     public BaseResponse<Void> updateWindAlarm(HttpServletRequest httpServletRequest, @RequestBody HashMap<String, String> request) {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             userService.updateWindAlarm(userIdx, request.get("windAlarm").charAt(0), Integer.valueOf(request.get("windValue")));
             return new BaseResponse<>();
         } catch (BaseException exception) {
@@ -170,7 +168,7 @@ public class UserController {
     @GetMapping("/settings/user")
     public BaseResponse<UserInfo> getUserInfo(HttpServletRequest httpServletRequest) throws Exception {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             UserInfo userInfo = userService.getUserInfo(userIdx);
             return new BaseResponse<>(userInfo);
         } catch (BaseException exception) {
@@ -184,7 +182,7 @@ public class UserController {
     @PostMapping("/settings/user")
     public BaseResponse<UserInfo> updateUserName(HttpServletRequest httpServletRequest, @RequestBody HashMap<String, String> request) throws Exception {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             userService.updateUserName(userIdx, request.get("name"));
             return new BaseResponse<>(BaseResponseStatus.SUCCESS);
         } catch (BaseException exception) {
@@ -198,7 +196,7 @@ public class UserController {
     @ResponseBody
     @PostMapping("/settings/user/password")
     public BaseResponse<String> pwValidation(HttpServletRequest httpServletRequest, @RequestBody HashMap<String, String> request) throws Exception {
-        Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+        Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
         if(userService.pwValidation(userIdx,request.get("password"))){
             return new BaseResponse<>("일치 확인");
         }else return new BaseResponse<>(BaseResponseStatus.INVALID);
@@ -210,7 +208,7 @@ public class UserController {
     @PostMapping("/settings/user/password/change")
     public BaseResponse<Void> updatePw(HttpServletRequest httpServletRequest, @RequestBody HashMap<String, String> request) throws Exception {
         try {
-            Long userIdx = JwtService.getuserIdx(httpServletRequest.getHeader("accesstoken"));
+            Long userIdx = JwtService.getUserIdx(httpServletRequest.getHeader("accesstoken"));
             userService.updatePw(userIdx,request.get("password"));
             return new BaseResponse<>();
         } catch (BaseException exception) {

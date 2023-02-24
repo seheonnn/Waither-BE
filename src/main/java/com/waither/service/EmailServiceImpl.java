@@ -19,6 +19,8 @@ public class EmailServiceImpl implements EmailService{
 
     public static final String ePw = createKey();
 
+    //TODO : 비밀번호 임시 발급
+
     private MimeMessage createMessage(String to)throws Exception{
         System.out.println("보내는 대상 : "+ to);
         System.out.println("인증 번호 : "+ePw);
