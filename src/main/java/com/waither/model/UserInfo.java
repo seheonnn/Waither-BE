@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class UserInfo {
 
+    private Long userIdx;
     private String name;
     private String email;
 

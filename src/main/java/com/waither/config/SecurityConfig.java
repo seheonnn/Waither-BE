@@ -38,7 +38,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable();
+        httpSecurity.csrf().disable(); //csrf보안 해제
         httpSecurity.authorizeRequests() //보호된 uri에 접근할 수 있는 권한 설정
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/token/**").permitAll()
