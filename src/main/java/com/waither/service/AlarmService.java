@@ -36,6 +36,24 @@ public class AlarmService {
         this.userDetailRepository = userDetailRepository;
     }
 
+    // 알람 확인 로직
+    public boolean checkDuplicated(AlarmEntity newAlarm) {
+        List<AlarmEntity> alarms = alarmRepository.findAll();
+        boolean val = false;
+
+        if (alarms.isEmpty())
+            return true;
+
+        for (AlarmEntity alarm : alarms) {
+            if (alarm.getContents().equals(newAlarm.getContents()))
+                val = false; // 알람 중복 되면
+            else
+                val = true;
+        }
+
+        return val;
+    }
+
     //8 알람 생성                                   현재 기온
     public String createTempAlarm(Long userIdx, double temp) {
 
@@ -71,9 +89,9 @@ public class AlarmService {
 
             newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-            List<AlarmEntity> all = alarmRepository.findAll();
+//            List<AlarmEntity> all = alarmRepository.findAll();
 
-            this.alarmRepository.saveAndFlush(newAlarm);
+            alarmRepository.saveAndFlush(newAlarm);
             return newAlarm.getContents();
         }
         return null;
@@ -123,8 +141,10 @@ public class AlarmService {
             String content = day + "오늘 현재 기온은 " + getWeatherRes.getTmp() + "도, 최저 기온은 " + getWeatherRes.getTmn() + "도, 최고 기온은 " + getWeatherRes.getTmx() + "도입니다.";
             newAlarm.setContents(content);
             newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            this.alarmRepository.saveAndFlush(newAlarm);
+
+            alarmRepository.saveAndFlush(newAlarm);
             return newAlarm.getContents();
+
         }
         return null;
     }
@@ -143,8 +163,14 @@ public class AlarmService {
             newAlarm.setContents("새벽에 온도가 많이 떨어져요. 창문을 닫고 주무세요.");
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             newAlarm.setCreatedAt(ts);
-            this.alarmRepository.saveAndFlush(newAlarm);
-            return newAlarm.getContents();
+
+            if (checkDuplicated(newAlarm)) {
+                alarmRepository.saveAndFlush(newAlarm);
+                return newAlarm.getContents();
+
+            }
+            else return null;
+
         }
         return null;
     }
@@ -158,7 +184,7 @@ public class AlarmService {
 
         int t = 0;
         String cast = "";
-        pty3 = "눈날림";
+//        pty3 = "눈날림";
 
         if(user.getRainAlarm() == 'Y') {
 
@@ -198,8 +224,12 @@ public class AlarmService {
                 newAlarm.setContents(time + "시부터 " + cast + " 예보가 있어요!\n"
                         + "우산을 챙겨 가세요.");
                 newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-                alarmRepository.saveAndFlush(newAlarm);
-                return newAlarm.getContents();
+                if (checkDuplicated(newAlarm)) {
+                    alarmRepository.saveAndFlush(newAlarm);
+                    return newAlarm.getContents();
+
+                }
+                else return null;
             }
         }
         return null;
@@ -284,8 +314,13 @@ public class AlarmService {
             newAlarm.setUserIdx(userIdx);
             newAlarm.setContents("현재 풍속은 " + windValue + "으로 설정하신 풍속보다 높습니다.");
             newAlarm.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            this.alarmRepository.saveAndFlush(newAlarm);
-            return newAlarm.getContents();
+
+            if (checkDuplicated(newAlarm)) {
+                alarmRepository.saveAndFlush(newAlarm);
+                return newAlarm.getContents();
+
+            }
+            else return null;
         }
         return null;
     }
