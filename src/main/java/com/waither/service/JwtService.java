@@ -14,10 +14,7 @@ import static com.waither.security.jwt.JwtTokenProvider.SECRET_KEY;
 
 @Log4j2
 @Service
-@PropertySource(value = {"/application.yml"}, factory = YamlPropertySourceFactory.class)
-@RequiredArgsConstructor
 public class JwtService {
-
     public static Long getUserIdx (String token) {
         return Long.valueOf(Jwts.parser()
                 .setSigningKey(SECRET_KEY)
