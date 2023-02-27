@@ -12,6 +12,7 @@ import com.waither.security.oauth.userInfo.OAuth2UserInfo;
 import com.waither.security.oauth.userInfo.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class OAuthService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider tokenProvider;
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public String process(OAuthDto oAuthDto) {
         log.info("OAuth Login App - process");
@@ -54,7 +57,8 @@ public class OAuthService {
         UserEntity user = UserEntity.builder()
                 .userName(userInfo.getNickname())
                 .authId(userInfo.getAuthId())
-                .email(userInfo.getEmail())
+                .email(encoder.encode(userInfo.getEmail()))
+//                .email(userInfo.getEmail())
                 .pw("")
                 .role(String.valueOf(RoleType.USER)) //RoleType 클래스 추가함
                 .status('A')

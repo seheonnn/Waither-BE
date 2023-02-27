@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Service;
 public class OAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -73,7 +76,8 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         UserEntity user = UserEntity.builder()
                 .userName(userInfo.getName())
                 .authId(userInfo.getId())
-                .email(userInfo.getEmail())
+                .email(encoder.encode(userInfo.getEmail()))
+//                .email(userInfo.getEmail())
                 .pw("")
                 .role(String.valueOf(RoleType.USER)) //RoleType 클래스 추가함
                 .status('A')
