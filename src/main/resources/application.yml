@@ -33,8 +33,8 @@ spring:
           kakao:
             client-id: d123b0e487f515ba55f26453d6537fbc
             client-secret: yc8CcG3LgvElOJgGY32sXqMyqcR9JNGO
-#            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
-            redirect-uri: https://waither.shop/login/oauth2/code/kakao
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+#            redirect-uri: https://waither.shop/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             client-name: Kakao
@@ -47,6 +47,11 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
+
+jwt:
+  secret: 6B64DCA4E72F58EDIKU9AAB215FE7
+
 
 mail:
   smtp:

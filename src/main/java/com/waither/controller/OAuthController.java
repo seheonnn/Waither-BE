@@ -24,7 +24,6 @@ public class OAuthController {
 //        String redirect_uri = "http://localhost:8080/oauth2/authorization/" + provider; // <- 이거 주석하고
         String redirect_uri = "https://waither.shop/oauth2/authorization/" + provider; // <- 이거 주석 풀기
         response.sendRedirect(redirect_uri);
-
     }
 
     //OAuth2 성공 - redirect uri로 token 반환
