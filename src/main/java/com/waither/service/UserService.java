@@ -14,6 +14,9 @@ import com.waither.repository.UserDetailRepository;
 import com.waither.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -216,6 +219,7 @@ public class UserService {
     @Transactional
     public boolean updateUserName(Long userIdx, String name) throws BaseException{
         try{
+            log.info(SecurityContextHolder.getContext().getAuthentication());
             Optional<UserEntity> user = userRepository.findById(userIdx);
             if(user.isPresent()){
                 log.info(user.get().getUserName());
