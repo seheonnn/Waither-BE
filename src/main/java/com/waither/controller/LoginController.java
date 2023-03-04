@@ -35,7 +35,7 @@ public class LoginController {
     UserService userService;
     private final OAuthService oAuthService;
 
-    //1 일반 로그인 3 카카오 로그인
+    //로그인 전체
     //앱단에서 사용자 정보까지 얻어서 넘겨주면 디비 검증 후 저장하고 jwt 넘겨주기 (일반, 카카오, 애플 로그인 모두 사용)
     @ApiOperation(value = "#1일반 로그인, #3카카오 로그인", notes = "앱단에서 사용자 정보까지 얻어서 넘겨주면 디비 검증 후 저장하고 jwt 넘겨주기 (일반, 카카오, 애플 로그인 모두 사용)")
     @PostMapping("")
@@ -44,19 +44,6 @@ public class LoginController {
         String res = oAuthService.process(dto);
         return ResponseEntity.ok(new JsonResponse(200,"login-getToken", res));
     }
-
-    //#1 유저 일반 로그인
-//    @ApiOperation(value = "#1 유저 일반 로그인", notes = "Body에 email, pw 담아서 보내기 ex) { \"email\" : \"abc123@gmail.com\", \"pw\": \"abc1234\" }")
-//    @PostMapping("")
-//    public BaseResponse<Void> userLogin(@RequestBody HashMap<String,String> request) throws Exception{
-//        try{
-//            loginService.userLogin(request.get("email"), request.get("pw"));
-//            return new  BaseResponse<>(null);
-//        } catch (BaseException exception){
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//
-//    }
 
     //#2 비밀번호 찾기
     @ApiOperation(value = "#2 비밀번호 찾기", notes = "Param에 유저가 입력한 이메일 보내기 ex) email = \"abc1234\"")

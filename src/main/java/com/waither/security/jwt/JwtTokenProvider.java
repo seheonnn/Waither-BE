@@ -6,6 +6,7 @@ import com.waither.security.oauth.CustomAuthentication;
 import io.jsonwebtoken.*;
 import lombok.extern.log4j.Log4j2;
 import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,7 +30,8 @@ public class JwtTokenProvider {
 
     private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 30; //30DAY
     private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 14; //2WEEK
-    private static final String SECRET_KEY = "6B64DCA4E72F58EDIKU9AAB215FE7"; //yml에 설정
+//    @Value("spring.jwt.secret")
+    public static final String SECRET_KEY = "6B64DCA4E72F58EDIKU9AAB215FE7"; //yml에 설정
 
 
     //accessToken 생성
@@ -42,6 +44,7 @@ public class JwtTokenProvider {
 
         CustomAuthentication user = (CustomAuthentication) authentication.getPrincipal();
 
+//        Long userIdx = getUserId(user).getUserIdx();
         String userId = user.getId(); //social id(=authId)
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

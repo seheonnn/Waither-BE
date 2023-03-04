@@ -62,10 +62,14 @@ public class UserDetailEntity {
     @Column(name = "rainAlarm", nullable = false)
     @ColumnDefault("'Y'")
     private char rainAlarm;
+//
+//    @Column(name = "snowAlarm", nullable = false)
+//    @ColumnDefault("'Y'")
+//    private char snowAlarm;
 
     @Column(name = "snowAlarm", nullable = false)
     @ColumnDefault("'Y'")
-    private char snowAlarm;
+    private char sAlarm;
 
     @Column(name = "windAlarm", nullable = false)
     @ColumnDefault("'Y'")
@@ -153,7 +157,7 @@ public class UserDetailEntity {
                 .climateAlarm(climateAlarm)
                 .customAlarm(customAlarm)
                 .rainAlarm(rainAlarm)
-                .snowAlarm(snowAlarm)
+//                .snowAlarm(snowAlarm)
                 .windAlarm(windAlarm)
                 .windValue(windValue)
                 .rainFall(rainFall)

@@ -172,7 +172,7 @@ public class UserService {
 
     // 16 알람 설정 변경
     @Transactional
-    public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, String outTime ,Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm, Character snowAlarm)  throws  BaseException{
+    public boolean updateAlarmData(Long userIdx, Character Mon, Character Tue, Character Wed, Character Thu, Character Fri, Character Sat, Character Sun, String outTime ,Character outAlarm, Character climateAlarm, Character customAlarm, Character rainAlarm)  throws  BaseException{
         UserDetailEntity userData = userDetailRepository.findById(userIdx).get();
         userData.setMon(Mon);
         userData.setTue(Tue);
@@ -186,7 +186,7 @@ public class UserService {
         userData.setClimateAlarm(climateAlarm);
         userData.setCustomAlarm(customAlarm);
         userData.setRainAlarm(rainAlarm);
-        userData.setSnowAlarm(snowAlarm);
+//        userData.setSnowAlarm(snowAlarm);
         return true;
     }
 

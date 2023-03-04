@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface UserDetailRepository extends JpaRepository<UserDetailEntity, Long> {
 
-    @Query(value = "select u.Mon as mon, u.Tue as tue, u.Wed as wed, u.Thu as thu, u.Fri as fri, u.Sat as sat, u.Sun as sun,u.outTime as outTime ,u.outAlarm as outAlarm, u.climateAlarm as climateAlarm, u.customAlarm as customAlarm, u.rainAlarm as rainAlarm, u.snowAlarm as snowAlarm from UserDetail u where u.userIdx = :userIdx")
+    @Query(value = "select u.Mon as mon, u.Tue as tue, u.Wed as wed, u.Thu as thu, u.Fri as fri, u.Sat as sat, u.Sun as sun,u.outTime as outTime ,u.outAlarm as outAlarm, u.climateAlarm as climateAlarm, u.customAlarm as customAlarm, u.rainAlarm as rainAlarm from UserDetail u where u.userIdx = :userIdx")
     Optional<UserAlarmMapping> findUserAlarm(@Param("userIdx") Long userIdx);
 
     @Query(value = "select u.rainFall as rainFall, u.dust as dust, u.wind as wind from UserDetail u where u.userIdx = :userIdx")

@@ -18,8 +18,4 @@ public class LoginService {
         this.userRepository = userRepository;
     }
 
-    //#1 유저 일반 로그인
-    public void userLogin(String email, String pw) throws BaseException {
-//        Optional<UserEntity> user = userRepository.findById();
-    }
 }
