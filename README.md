@@ -1,3 +1,6 @@
+![웨이더 배너 디자인](https://user-images.githubusercontent.com/69234788/223329313-1132cb19-7567-405f-babc-52426897f16f.jpeg)
+![웨이더 포스터 디자인](https://user-images.githubusercontent.com/69234788/223329302-4eb8869a-9327-4f2d-a9c7-1d78cd31871e.jpeg)
+
 # Waither-BE
 ## Commit Message Convention
 
